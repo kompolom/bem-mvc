@@ -73,48 +73,21 @@ module.exports = function(config) {
         ]);
     });
 
-    //tools.configureSets({
-        //sets : {
-            //destPath : 'desktop.sets',
-            //levels : getDesktopLibLevels(config)
-        //},
-        //jsdocs : {
-            //_suffixes : ['vanilla.js', 'node.js', 'browser.js', 'js']
-        //},
-        //examples : {
-            //levels : getDesktopLibLevels(config),
-            //_techs : [
-                //[require('enb/techs/file-copy'), {
-                    //sourceTarget : '?.bemjson.js',
-                    //destTarget : '_?.bemjson.js'
-                //}],
-                //[require('enb/techs/file-copy'), {
-                    //sourceTarget : '?.html',
-                    //destTarget : '_?.html'
-                //}],
-                //[require('enb-modules/techs/prepend-modules'), {
-                    //target : '?.js',
-                    //source : '?.pre.js'
-                //}],
-                //[require('enb-diverse-js/techs/browser-js'), {
-                    //target : '?.pre.js'
-                //}],
-                //[require('enb-bemxjst/techs/bemhtml'), { devMode : false }],
-                //require('enb/techs/html-from-bemjson')
-            //],
-            //_targets : [
-                //'?.js', '_?.bemjson.js',
-                //'?.bemhtml.js', '_?.html'
-            //],
-            //_optimizeTargets : [
-                //'?.js'
-            //]
-        //}
-    //});
+
+    config.includeConfig('enb-bem-specs');
+    var specs = config.module('enb-bem-specs').createConfigurator('specs');
+    specs.configure({
+        destPath : 'specs',
+        jsSuffixes : ['vanilla.js', 'js', 'browser.js'],
+        sourceLevels : getDesktopLevels(),
+        levels : ['common.blocks']
+
+    });
 };
 
 function getDesktopLevels() {
     return [
+        { path : 'libs/bem-pr/spec.blocks', check : false },
         { path : 'libs/bem-core/common.blocks', check : false },
         { path : 'libs/bem-core/desktop.blocks', check : false },
         { path : 'libs/bem-components/common.blocks', check : false },
