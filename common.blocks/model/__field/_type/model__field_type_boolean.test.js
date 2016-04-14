@@ -1,7 +1,7 @@
-/*BEM.TEST.decl('i-model__field_type_boolean', function() {
+modules.define('spec', ['model', 'sinon', 'chai'], function(provide, MODEL, sinon, chai) {
 
     describe('Field with type "boolean"', function() {
-        BEM.MODEL.decl('boolean-type-field', {
+        MODEL.decl('boolean-type-field', {
             f: {
                 type: 'boolean',
                 validation: {
@@ -41,62 +41,58 @@
         });
 
         it('should have fields', function() {
-            var model = BEM.MODEL.create('boolean-type-field');
+            var model = MODEL.create('boolean-type-field');
 
-            expect(model.hasField('f')).toBe(true);
-            expect(model.hasField('f1')).toBe(true);
-            expect(model.hasField('f2')).toBe(true);
-            expect(model.hasField('f3')).toBe(true);
-            expect(model.hasField('f4')).toBe(true);
-            expect(model.hasField('f5')).toBe(true);
+            model.hasField('f').should.be.true();
+            model.hasField('f1').should.be.true();
+            model.hasField('f2').should.be.true();
+            model.hasField('f3').should.be.true();
+            model.hasField('f4').should.be.true();
+            model.hasField('f5').should.be.true();
         });
 
         it('should have default value', function() {
-            expect(BEM.MODEL.create('boolean-type-field').get('f1')).toEqual(true);
+            MODEL.create('boolean-type-field').get('f1').should.be.true();
         });
 
         it('should have init value from decl', function() {
-            expect(BEM.MODEL.create('boolean-type-field').get('f2')).toEqual(false);
+            MODEL.create('boolean-type-field').get('f2').should.be.false();;
         });
 
         it('should have init value from create', function() {
-            expect(
-                BEM.MODEL
-                    .create('boolean-type-field', { f: false })
-                    .get('f'))
-                .toEqual(false);
+            MODEL
+                .create('boolean-type-field', { f: false })
+                .get('f')
+            .should.be.false();;
         });
 
         it('should have format value', function() {
-            expect(
-                BEM.MODEL
-                    .create('boolean-type-field', { f3: false })
-                    .get('f3', 'format'))
-                .toEqual(0);
+            MODEL
+                .create('boolean-type-field', { f3: false })
+                .get('f3', 'format')
+            .should.be.equal(0);
         });
 
         it('should set value', function() {
-            expect(
-                BEM.MODEL
-                    .create('boolean-type-field')
-                    .set('f', false)
-                    .set('f', true)
-                    .get('f'))
-                .toEqual(true);
+            MODEL
+                .create('boolean-type-field')
+                .set('f', false)
+                .set('f', true)
+                .get('f')
+            .should.be.true();
         });
 
         it('should clear value', function() {
-            expect(
-                BEM.MODEL
-                    .create('boolean-type-field')
-                    .set('f', false)
-                    .clear('f')
-                    .get('f'))
-                .toBe(undefined);
+            chai.expect(MODEL
+                .create('boolean-type-field')
+                .set('f', false)
+                .clear('f')
+                .get('f'))
+            .to.be.undefined();
         });
 
         it('should be empty', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('boolean-type-field')
                 .update({
                     f: true,
@@ -104,14 +100,14 @@
                 })
                 .clear('f');
 
-            expect(model.isEmpty('f')).toBe(true);
+            model.isEmpty('f').should.be.true();
 
             model.clear();
-            expect(model.isEmpty()).toBe(true);
+            model.isEmpty().should.be.true();
         });
 
         it('should show changes', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('boolean-type-field', {
                     f: true,
                     f4: false
@@ -122,12 +118,12 @@
                     f4: true
                 });
 
-            expect(model.isChanged('f')).toBe(true);
-            expect(model.isChanged()).toBe(true);
+            model.isChanged('f').should.be.true();
+            model.isChanged().should.be.true();
         });
 
         it('should update models', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('boolean-type-field')
             model.update({
                 f: true,
@@ -137,9 +133,9 @@
                 f4: true
             });
 
-            expect(model.get('f')).toEqual(true);
+            model.get('f').should.be.true();
 
-            expect(model.toJSON()).toEqual({
+            model.toJSON().should.be.eqls({
                 f: true,
                 f1: false,
                 f2: false,
@@ -150,20 +146,20 @@
         });
 
         it('should fix and rollback values', function() {
-            expect(
-                BEM.MODEL
+
+                MODEL
                     .create('boolean-type-field')
                     .set('f', 0)
                     .fix()
                     .set('f', true)
                     .rollback()
-                    .get('f'))
-                .toEqual(false);
+                    .get('f')
+                .should.be.false();;
         });
 
         it('should return data', function() {
-            expect(
-                BEM.MODEL
+
+                MODEL
                     .create('boolean-type-field', {
                         f: true,
                         f1: false,
@@ -171,8 +167,8 @@
                         f3: false,
                         f4: true
                     })
-                    .toJSON())
-                .toEqual({
+                    .toJSON()
+                .should.eqls({
                     f: true,
                     f1: false,
                     f2: false,
@@ -183,25 +179,25 @@
         });
 
         it('should check validation', function() {
-            var model = BEM.MODEL.create('boolean-type-field');
+            var model = MODEL.create('boolean-type-field');
 
-            expect(model
+            model
                 .set('f', true)
-                .isValid())
-                .toBe(true);
+                .isValid()
+                .should.be.true();
 
-            expect(model
+            model
                 .clear('f')
-                .isValid())
-                .toBe(false);
+                .isValid()
+                .should.be.false();
         });
 
         it('should fire changes', function() {
-            var onChange = jasmine.createSpy('onModelChange'),
-                onFieldChange = jasmine.createSpy('onFieldChange'),
-                disabledHandler = jasmine.createSpy('disabledHandler');
+            var onChange = sinon.spy(),
+                onFieldChange = sinon.spy(),
+                disabledHandler = sinon.spy();
 
-            BEM.MODEL
+            MODEL
                 .create('boolean-type-field')
                 .on('change', onChange)
                 .on('change', disabledHandler)
@@ -209,20 +205,19 @@
                 .un('change', disabledHandler)
                 .set('f', 666);
 
-            expect(onChange).toHaveBeenCalled();
-            expect(onFieldChange).toHaveBeenCalled();
-            expect(disabledHandler).not.toHaveBeenCalled();
+            onChange.called.should.be.true();
+            onFieldChange.called.should.be.true();
+            disabledHandler.called.should.not.be.true();
         });
 
         it('should destruct', function() {
-            BEM.MODEL
+            MODEL
                 .create({ name: 'boolean-type-field', id: 'uniqModelId' })
                 .destruct();
 
-            expect(BEM.MODEL.get({ name: 'boolean-type-field', id: 'uniqModelId' }).length).toEqual(0);
+            MODEL.get({ name: 'boolean-type-field', id: 'uniqModelId' }).length.should.be.equal(0);
         });
 
     });
-
+    provide();
 });
-*/
