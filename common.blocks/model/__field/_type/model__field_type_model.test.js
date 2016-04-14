@@ -1,7 +1,7 @@
-/*BEM.TEST.decl('i-model__field_type_model', function() {
+modules.define('spec', ['model', 'sinon', 'chai'], function(provide, MODEL, sinon) {
 
     describe('Field with type "model"', function() {
-        BEM.MODEL.decl('model-type-field', {
+        MODEL.decl('model-type-field', {
             f: {
                 type: 'model',
                 modelName: 'inner-model',
@@ -14,7 +14,7 @@
                 }
             }
         });
-        BEM.MODEL.decl('inner-model', {
+        MODEL.decl('inner-model', {
             innerF: {
                 type: 'string',
                 validation: {
@@ -27,103 +27,103 @@
         });
 
         it('should change values', function() {
-            var model = BEM.MODEL.create('model-type-field', {
+            var model = MODEL.create('model-type-field', {
                     f: {
                         innerF: 'str'
                     }
                 }),
 
-                onFieldChange = jasmine.createSpy('onFieldChange'),
-                onModelChange = jasmine.createSpy('onModelChange');
+                onFieldChange = sinon.spy(),
+                onModelChange = sinon.spy();
 
             model.on('f', 'change', onFieldChange);
             model.on('change', onModelChange);
 
             model.set('f', { innerF: 'new str' });
 
-            expect(model.get('f').get('innerF')).toEqual('new str');
-            expect(onFieldChange).toHaveBeenCalled();
-            expect(onModelChange).toHaveBeenCalled();
+            model.get('f').get('innerF').should.be.equal('new str');
+            onFieldChange.called.should.be.true();
+            onModelChange.called.should.be.true();
 
             model.destruct();
-            expect(BEM.MODEL.get('model-type-field').length).toEqual(0);
-            expect(BEM.MODEL.get('inner-model').length).toEqual(0);
+            MODEL.get('model-type-field').length.should.be.equal(0);
+            MODEL.get('inner-model').length.should.be.equal(0);
         });
 
         it('should set model as value', function() {
-            var model = BEM.MODEL.create('model-type-field', {
+            var model = MODEL.create('model-type-field', {
                     f: {
                         innerF: 'str'
                     }
                 }),
-                modelToSet = BEM.MODEL.create({ name: 'inner-model', parentModel: model }, { innerF: 'inner2' }),
+                modelToSet = MODEL.create({ name: 'inner-model', parentModel: model }, { innerF: 'inner2' }),
 
-                onFieldChange = jasmine.createSpy('onFieldChange'),
-                onInnerFieldChange = jasmine.createSpy('onInnerFieldChange'),
-                onModelChange = jasmine.createSpy('onModelChange');
+                onFieldChange = sinon.spy(),
+                onInnerFieldChange = sinon.spy(),
+                onModelChange = sinon.spy();
 
             model.on('f', 'change', onFieldChange);
             model.on('change', onModelChange);
 
             model.set('f', modelToSet);
 
-            expect(model.get('f').get('innerF')).toEqual('inner2');
-            expect(onFieldChange).toHaveBeenCalled();
-            expect(onModelChange).toHaveBeenCalled();
+            model.get('f').get('innerF').should.be.equal('inner2');
+            onFieldChange.called.should.be.true();
+            onModelChange.called.should.be.true();
 
             model.on('f', 'change', onInnerFieldChange);
             modelToSet.set('innerF', 'bla');
-            expect(onInnerFieldChange).toHaveBeenCalled();
+            onInnerFieldChange.called.should.be.true();
 
             model.destruct();
-            expect(BEM.MODEL.get('model-type-field').length).toEqual(0);
-            expect(BEM.MODEL.get('inner-model').length).toEqual(0);
+            MODEL.get('model-type-field').length.should.be.equal(0);
+            MODEL.get('inner-model').length.should.be.equal(0);
         });
 
         it('should change inner value', function() {
-            var model = BEM.MODEL.create('model-type-field', {
+            var model = MODEL.create('model-type-field', {
                     f: {
                         innerF: 'str'
                     }
                 }),
 
-                onFieldChange = jasmine.createSpy('onFieldChange'),
-                onModelChange = jasmine.createSpy('onModelChange');
+                onFieldChange = sinon.spy(),
+                onModelChange = sinon.spy();
 
             model.on('f', 'change', onFieldChange);
             model.on('change', onModelChange);
 
             model.get('f').set('innerF', 'new str');
 
-            expect(model.get('f').get('innerF')).toEqual('new str');
-            expect(onFieldChange).toHaveBeenCalled();
-            expect(onModelChange).toHaveBeenCalled();
+            model.get('f').get('innerF').should.be.equal('new str');
+            onFieldChange.called.should.be.true();
+            onModelChange.called.should.be.true();
 
             model.destruct();
-            expect(BEM.MODEL.get('model-type-field').length).toEqual(0);
-            expect(BEM.MODEL.get('inner-model').length).toEqual(0);
+            MODEL.get('model-type-field').length.should.be.equal(0);
+            MODEL.get('inner-model').length.should.be.equal(0);
         });
 
         it('should serialize data', function() {
-            var model = BEM.MODEL.create('model-type-field', {
+            var model = MODEL.create('model-type-field', {
                 f: {
                     innerF: 'str'
                 }
             });
 
-            expect(model.toJSON()).toEqual({
+            model.toJSON().should.be.eql({
                 f: {
                     innerF: 'str'
                 }
             });
 
             model.destruct();
-            expect(BEM.MODEL.get('model-type-field').length).toEqual(0);
-            expect(BEM.MODEL.get('inner-model').length).toEqual(0);
+            MODEL.get('model-type-field').length.should.be.equal(0);
+            MODEL.get('inner-model').length.should.be.equal(0);
         });
 
         it('should clear data', function() {
-            var model = BEM.MODEL.create('model-type-field', {
+            var model = MODEL.create('model-type-field', {
                 f: {
                     innerF: 'str'
                 }
@@ -131,15 +131,15 @@
 
             model.clear();
 
-            expect(model.isEmpty()).toEqual(true);
+            model.isEmpty().should.be.equal(true);
 
             model.destruct();
-            expect(BEM.MODEL.get('model-type-field').length).toEqual(0);
-            expect(BEM.MODEL.get('inner-model').length).toEqual(0);
+            MODEL.get('model-type-field').length.should.be.equal(0);
+            MODEL.get('inner-model').length.should.be.equal(0);
         });
 
         it('should fix and rollback data', function() {
-            var model = BEM.MODEL.create('model-type-field', {
+            var model = MODEL.create('model-type-field', {
                 f: {
                     innerF: 'str'
                 }
@@ -149,58 +149,58 @@
             model.fix();
 
             model.get('f').set('innerF', 'wrong str');
-            expect(model.get('f').get('innerF')).toEqual('wrong str');
+            model.get('f').get('innerF').should.be.equal('wrong str');
 
             model.rollback();
-            expect(model.get('f').get('innerF')).toEqual('correct str');
+            model.get('f').get('innerF').should.be.equal('correct str');
 
             model.destruct();
-            expect(BEM.MODEL.get('model-type-field').length).toEqual(0);
-            expect(BEM.MODEL.get('inner-model').length).toEqual(0);
+            MODEL.get('model-type-field').length.should.be.equal(0);
+            MODEL.get('inner-model').length.should.be.equal(0);
         });
 
         it('should not destruct inner model', function() {
-            var model = BEM.MODEL.create('model-type-field', {
+            var model = MODEL.create('model-type-field', {
                 f: {
                     innerF: 'str'
                 }
             }),
             innerModel = model.get('f'),
-            modelToSet = BEM.MODEL.create({ name: 'inner-model', parentModel: model }, { innerF: 'inner2' });
+            modelToSet = MODEL.create({ name: 'inner-model', parentModel: model }, { innerF: 'inner2' });
 
             model.set('f', modelToSet, { destruct: false });
-            expect(BEM.MODEL.getOne({ name: 'inner-model', id: innerModel.id })).toBeDefined();
+            MODEL.getOne({ name: 'inner-model', id: innerModel.id }).should.exist();
 
             model.destruct();
             innerModel.destruct();
-            expect(BEM.MODEL.get('model-type-field').length).toEqual(0);
-            expect(BEM.MODEL.get('inner-model').length).toEqual(0);
+            MODEL.get('model-type-field').length.should.be.equal(0);
+            MODEL.get('inner-model').length.should.be.equal(0);
         });
 
         it('should check validation', function() {
-            var model = BEM.MODEL.create('model-type-field');
+            var model = MODEL.create('model-type-field');
 
-            expect(model
+            model
                 .set('f', { innerF: 'string' })
-                .isValid())
-                .toBe(true);
+                .isValid()
+                .should.be.true();
 
-            expect(model
+            model
                 .set('f', { innerF: 'loooooooooong string' })
-                .isValid())
-                .toBe(false);
+                .isValid()
+                .should.be.false();
 
-            expect(model
+            model
                 .clear('f')
-                .isValid())
-                .toBe(false);
+                .isValid()
+                .should.be.false();
 
             model.destruct();
-            expect(BEM.MODEL.get('model-type-field').length).toEqual(0);
-            expect(BEM.MODEL.get('inner-model').length).toEqual(0);
+            MODEL.get('model-type-field').length.should.be.equal(0);
+            MODEL.get('inner-model').length.should.be.equal(0);
         });
 
     });
 
+    provide();
 });
-*/

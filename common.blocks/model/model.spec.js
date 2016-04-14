@@ -1,4 +1,7 @@
-modules.define('spec', ['model', 'sinon', 'jquery', 'chai'], function(provide, MODEL, sinon, $, chai) {
+modules.define('spec',
+    ['model', 'sinon', 'jquery', 'chai'],
+    function(provide, MODEL, sinon, $, chai) {
+        
     var _spy = sinon.spy;
     sinon.spy = function() {
         return _spy.call(sinon)

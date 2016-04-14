@@ -1,8 +1,9 @@
-({
+([{
     mustDeps : [
         'model-aggregator',
     ],
     shouldDeps: [
+        'objects',
         {
             block: 'functions',
             elems: ['throttle', 'debounce']
@@ -22,4 +23,15 @@
             }
         }
     ]
-})
+},
+{
+    tech : 'spec.js',
+    shouldDeps : [
+        {
+            elem : 'field',
+            mods : {
+                type : ['array', 'boolean', 'string', 'model']
+            }
+        }
+    ]
+}])

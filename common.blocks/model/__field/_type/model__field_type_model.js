@@ -1,7 +1,7 @@
 modules.define(
     'model',
-    ['inherit'],
-    function(provide, inherit, MODEL) {
+    ['inherit', 'objects'],
+    function(provide, inherit, Objects, MODEL) {
 
 
     MODEL.FIELD.types.model = inherit(MODEL.FIELD, {
@@ -136,14 +136,14 @@ modules.define(
         _getValidationRules: function() {
             var field = this;
 
-            return $.extend(this._commonRules(), {
+            return Objects.extend(this._commonRules(), { // FIXME jQuery
                 /**
                  * валидация вложенной модели
                  */
                 deep: {
                     value: true,
                     validate: function(curValue, ruleValue, name) {
-                        return field._value.isValid() == ruleValue
+                        return field._value.isValid() == ruleValue;
                     }
                 }
             });
