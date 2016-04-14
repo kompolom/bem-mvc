@@ -1,4 +1,4 @@
-modules.define('test', ['model', 'sinon', 'jquery', 'chai'], function(provide, MODEL, sinon, $, chai) {
+modules.define('spec', ['model', 'sinon', 'jquery', 'chai'], function(provide, MODEL, sinon, $, chai) {
     var _spy = sinon.spy;
     sinon.spy = function() {
         return _spy.call(sinon)
@@ -378,7 +378,7 @@ describe('MODEL', function() {
         });
 
     });
-/*
+
     //todo: написать тест на валидацию по максимально развернутой схеме
     describe('validate', function() {
         MODEL.decl('valid-model', {
@@ -435,12 +435,12 @@ describe('MODEL', function() {
 
         it('model should be valid', function() {
             model.set('f3', 1);
-            expect(model.isValid()).toEqual(true);
+            model.isValid().should.be.ok();
         });
 
         it('model should be invalid', function() {
             model.clear('f1');
-            expect(model.isValid()).toEqual(false);
+            model.isValid().should.be.false();
         });
     });
 
@@ -449,39 +449,39 @@ describe('MODEL', function() {
 
         describe('buildPath pathParts.name', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({ name: 'model' })).toEqual('model:*');
+                MODEL.buildPath({ name: 'model' }).should.be.equal('model:*');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([{ name: 'model1' }, { name: 'model2' }])).toEqual('model1:*,model2:*');
+                MODEL.buildPath([{ name: 'model1' }, { name: 'model2' }]).should.be.equal('model1:*,model2:*');
             });
         });
 
         describe('buildPath pathParts.name [pathParts.id]', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({ name: 'model', id: 1 })).toEqual('model:1');
+                MODEL.buildPath({ name: 'model', id: 1 }).should.be.equal('model:1');
 
-                expect(MODEL.buildPath({ name: 'model', id: '2' })).toEqual('model:2');
+                MODEL.buildPath({ name: 'model', id: '2' }).should.be.equal('model:2');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([{ name: 'model', id: 1 }, { name: 'model', id: '2' }]))
-                    .toEqual('model:1,model:2');
+                MODEL.buildPath([{ name: 'model', id: 1 }, { name: 'model', id: '2' }])
+                    .should.be.equal('model:1,model:2');
             });
         });
 
         // parent
         describe('buildPath pathParts.name [pathParts.parentName]', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({
+                MODEL.buildPath({
                     name: 'model',
                     id: 1,
                     parentName: 'parent-model'
-                })).toEqual('parent-model.model:1');
+                }).should.be.equal('parent-model.model:1');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([
+                MODEL.buildPath([
                     {
                         name: 'model',
                         id: 1,
@@ -492,22 +492,22 @@ describe('MODEL', function() {
                         id: '2',
                         parentName: 'parent-model'
                     }
-                ])).toEqual('parent-model.model:1,parent-model.model:2');
+                ]).should.be.equal('parent-model.model:1,parent-model.model:2');
             });
         });
 
         describe('buildPath pathParts.name [pathParts.parentId]', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({
+                MODEL.buildPath({
                     name: 'model',
                     id: 1,
                     parentName: 'parent-model',
                     parentId: 42
-                })).toEqual('parent-model:42.model:1');
+                }).should.be.equal('parent-model:42.model:1');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([
+                MODEL.buildPath([
                     {
                         name: 'model',
                         id: 1,
@@ -520,24 +520,24 @@ describe('MODEL', function() {
                         parentName: 'parent-model',
                         parentId: '2'
                     }
-                ])).toEqual('parent-model:42.model:1,parent-model:2.model:2');
+                ]).should.be.equal('parent-model:42.model:1,parent-model:2.model:2');
             });
         });
 
         describe('buildPath pathParts.name [pathParts.parentPath]', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({
+                MODEL.buildPath({
                     name: 'model',
                     id: 1,
                     parentPath: {
                         name: 'parent-model',
                         id: 1
                     }
-                })).toEqual('parent-model:1.model:1');
+                }).should.be.equal('parent-model:1.model:1');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([
+                MODEL.buildPath([
                     {
                         name: 'model',
                         id: 1,
@@ -554,7 +554,7 @@ describe('MODEL', function() {
                             id: 1
                         }
                     }
-                ])).toEqual('parent-model:1.model:1,parent-model:1.model:2');
+                ]).should.be.equal('parent-model:1.model:1,parent-model:1.model:2');
             });
         });
 
@@ -571,15 +571,15 @@ describe('MODEL', function() {
 
         describe('buildPath pathParts.name [pathParts.parentModel]', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({
+                MODEL.buildPath({
                     name: 'model',
                     id: 1,
                     parentModel: parentModel1
-                })).toEqual('parent-model:1.model:1');
+                }).should.be.equal('parent-model:1.model:1');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([
+                MODEL.buildPath([
                     {
                         name: 'model',
                         id: 1,
@@ -590,7 +590,7 @@ describe('MODEL', function() {
                         id: '2',
                         parentModel: parentModel1
                     }
-                ])).toEqual('parent-model:1.model:1,parent-model:1.model:2');
+                ]).should.be.equal('parent-model:1.model:1,parent-model:1.model:2');
             });
         });
 
@@ -598,15 +598,15 @@ describe('MODEL', function() {
         //child
         describe('buildPath pathParts.name [pathParts.childName]', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({
+                MODEL.buildPath({
                     name: 'model',
                     id: 1,
                     childName: 'child-model'
-                })).toEqual('model:1.child-model');
+                }).should.be.equal('model:1.child-model');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([
+                MODEL.buildPath([
                     {
                         name: 'model',
                         id: 1,
@@ -617,22 +617,22 @@ describe('MODEL', function() {
                         id: '2',
                         childName: 'child-model'
                     }
-                ])).toEqual('model:1.child-model,model:2.child-model');
+                ]).should.be.equal('model:1.child-model,model:2.child-model');
             });
         });
 
         describe('buildPath pathParts.name [pathParts.childId]', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({
+                MODEL.buildPath({
                     name: 'model',
                     id: 1,
                     childName: 'child-model',
                     childId: 42
-                })).toEqual('model:1.child-model:42');
+                }).should.be.equal('model:1.child-model:42');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([
+                MODEL.buildPath([
                     {
                         name: 'model',
                         id: 1,
@@ -645,24 +645,24 @@ describe('MODEL', function() {
                         childName: 'child-model',
                         childId: '2'
                     }
-                ])).toEqual('model:1.child-model:42,model:2.child-model:2');
+                ]).should.be.equal('model:1.child-model:42,model:2.child-model:2');
             });
         });
 
         describe('buildPath pathParts.name [pathParts.childPath]', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({
+                MODEL.buildPath({
                     name: 'model',
                     id: 1,
                     childPath: {
                         name: 'child-model',
                         id: 1
                     }
-                })).toEqual('model:1.child-model:1');
+                }).should.be.equal('model:1.child-model:1');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([
+                MODEL.buildPath([
                     {
                         name: 'model',
                         id: 1,
@@ -679,7 +679,7 @@ describe('MODEL', function() {
                             id: 1
                         }
                     }
-                ])).toEqual('model:1.child-model:1,model:2.child-model:1');
+                ]).should.be.equal('model:1.child-model:1,model:2.child-model:1');
             });
         });
 
@@ -696,15 +696,15 @@ describe('MODEL', function() {
 
         describe('buildPath pathParts.name [pathParts.childModel]', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({
+                MODEL.buildPath({
                     name: 'model',
                     id: 1,
                     childModel: childModel1
-                })).toEqual('model:1.child-model:1');
+                }).should.be.equal('model:1.child-model:1');
             });
 
             it('for models', function() {
-                expect(MODEL.buildPath([
+                MODEL.buildPath([
                     {
                         name: 'model',
                         id: 1,
@@ -715,7 +715,7 @@ describe('MODEL', function() {
                         id: '2',
                         childModel: childModel1
                     }
-                ])).toEqual('model:1.child-model:1,model:2.child-model:1');
+                ]).should.be.equal('model:1.child-model:1,model:2.child-model:1');
             });
         });
 
@@ -742,7 +742,7 @@ describe('MODEL', function() {
 
         describe('buildPath for long long pathParts', function() {
             it('for model', function() {
-                expect(MODEL.buildPath({
+                MODEL.buildPath({
                     name: 'model',
                     id: 1,
                     parentPath: {
@@ -755,12 +755,11 @@ describe('MODEL', function() {
                         id: 2,
                         childModel: childChildModel
                     }
-                })).toEqual('grand-parent-model:granny.parent:1.model:1.child-model:2.child-child-model:some');
+                }).should.be.equal('grand-parent-model:granny.parent:1.model:1.child-model:2.child-child-model:some');
             });
         });
 
     });
-*/
 
 });
 

@@ -1,7 +1,13 @@
-/*BEM.TEST.decl('i-model__field_type_array', function() {
+modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(provide, MODEL, sinon, $, chai) {
+    var _spy = sinon.spy;
+    sinon.spy = function() {
+        return _spy.call(sinon);
+    };
+
+    var expect = chai.expect;
 
     describe('Field with type "array"', function() {
-        BEM.MODEL.decl('array-type-field', {
+        MODEL.decl('array-type-field', {
             f: {
                 type: 'array',
                 validation: {
@@ -49,7 +55,7 @@
         });
 
         it('should have fields', function() {
-            var model = BEM.MODEL.create('array-type-field');
+            var model = MODEL.create('array-type-field');
 
             expect(model.hasField('f')).toBe(true);
             expect(model.hasField('f1')).toBe(true);
@@ -60,16 +66,16 @@
         });
 
         it('should have default value', function() {
-            expect(BEM.MODEL.create('array-type-field').get('f1')).toEqual(['str1']);
+            expect(MODEL.create('array-type-field').get('f1')).toEqual(['str1']);
         });
 
         it('should have init value from decl', function() {
-            expect(BEM.MODEL.create('array-type-field').get('f2')).toEqual(['str2']);
+            expect(MODEL.create('array-type-field').get('f2')).toEqual(['str2']);
         });
 
         it('should have init value from create', function() {
             expect(
-                BEM.MODEL
+                MODEL
                     .create('array-type-field', { f: [3.14] })
                     .get('f'))
                 .toEqual([3.14]);
@@ -77,7 +83,7 @@
 
         it('should have format value', function() {
             expect(
-                BEM.MODEL
+                MODEL
                     .create('array-type-field', { f3: ['AAA']})
                     .get('f3', 'format'))
                 .toEqual('A');
@@ -85,7 +91,7 @@
 
         it('should set value', function() {
             expect(
-                BEM.MODEL
+                MODEL
                     .create('array-type-field')
                     .set('f', [3.14])
                     .get('f'))
@@ -93,7 +99,7 @@
         });
 
         it('should not change default value', function() {
-            var model = BEM.MODEL.create('array-type-field');
+            var model = MODEL.create('array-type-field');
 
             model.set('f', []);
             model.get('f').push('str');
@@ -104,7 +110,7 @@
 
         it('should clear value', function() {
             expect(
-                BEM.MODEL
+                MODEL
                     .create('array-type-field')
                     .set('f', [1])
                     .clear('f')
@@ -113,7 +119,7 @@
         });
 
         it('should be empty', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('array-type-field')
                 .update({
                     f: [1],
@@ -128,7 +134,7 @@
         });
 
         it('should show changes', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('array-type-field', {
                     f: [1],
                     f4: [3]
@@ -144,7 +150,7 @@
         });
 
         it('should update models', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('array-type-field')
                 .update({
                     f: ['qwe'],
@@ -168,7 +174,7 @@
 
         it('should fix and rollback values', function() {
             expect(
-                BEM.MODEL
+                MODEL
                     .create('array-type-field')
                     .set('f', [0])
                     .fix()
@@ -180,7 +186,7 @@
 
         it('should return data', function() {
             expect(
-                BEM.MODEL
+                MODEL
                     .create('array-type-field', {
                         f: ['up'],
                         f1: ['up1'],
@@ -200,7 +206,7 @@
         });
 
         it('should check validation', function() {
-            var model = BEM.MODEL.create('array-type-field');
+            var model = MODEL.create('array-type-field');
 
             expect(model
                 .set('f', ['array'])
@@ -218,7 +224,7 @@
                 onFieldChange = jasmine.createSpy('onFieldChange'),
                 disabledHandler = jasmine.createSpy('disabledHandler');
 
-            BEM.MODEL
+            MODEL
                 .create('array-type-field')
                 .on('change', onChange)
                 .on('change', disabledHandler)
@@ -232,24 +238,27 @@
         });
 
         it('should destruct', function() {
-            BEM.MODEL
+            MODEL
                 .create({ name: 'array-type-field', id: 'uniqModelId' })
                 .destruct();
 
-            expect(BEM.MODEL.get({ name: 'array-type-field', id: 'uniqModelId' }).length).toEqual(0);
+            expect(MODEL.get({ name: 'array-type-field', id: 'uniqModelId' }).length).toEqual(0);
         });
 
     });
+});
+/*BEM.TEST.decl('i-model__field_type_array', function() {
+
 
     describe('Field with type "array" (array methods)', function() {
-        BEM.MODEL.decl('array-type-field-special', {
+        MODEL.decl('array-type-field-special', {
             f: {
                 type: 'array'
             }
         });
 
         it('should check isChanged', function() {
-            var model = BEM.MODEL.create('array-type-field-special', { f: [1, 2, 3] });
+            var model = MODEL.create('array-type-field-special', { f: [1, 2, 3] });
 
             expect(model.isChanged('f')).toEqual(false);
 
@@ -258,7 +267,7 @@
         });
 
         it('should unshift values', function() {
-            var model = BEM.MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
+            var model = MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
 
                 onUnshiftChange = jasmine.createSpy('onUnshiftChange'),
                 onUnshiftAdd = jasmine.createSpy('onUnshiftAdd');
@@ -274,7 +283,7 @@
         });
 
         it('should pop values', function() {
-            var model = BEM.MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
+            var model = MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
 
                 onPopChange = jasmine.createSpy('onPopChange'),
                 onPopRemove = jasmine.createSpy('onPopAdd');
@@ -290,7 +299,7 @@
         });
 
         it('should shift values', function() {
-            var model = BEM.MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
+            var model = MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
 
                 onShiftChange = jasmine.createSpy('onShiftChange'),
                 onShiftRemove = jasmine.createSpy('onShiftAdd');
@@ -306,7 +315,7 @@
         });
 
         it('should splice values', function() {
-            var model = BEM.MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
+            var model = MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
 
                 onSpliceChange = jasmine.createSpy('onSpliceChange'),
                 onSpliceRemove = jasmine.createSpy('onSpliceAdd'),
@@ -325,7 +334,7 @@
         });
 
         it('should sort values', function() {
-            var model = BEM.MODEL.create('array-type-field-special', { f: [2, 1, 3] }),
+            var model = MODEL.create('array-type-field-special', { f: [2, 1, 3] }),
 
                 onSortChange = jasmine.createSpy('onSortChange');
 
@@ -338,7 +347,7 @@
         });
 
         it('should reverse values', function() {
-            var model = BEM.MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
+            var model = MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
 
                 onReverseChange = jasmine.createSpy('onReverseChange');
 
@@ -351,7 +360,7 @@
         });
 
         it('should iterate values', function() {
-            var model = BEM.MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
+            var model = MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
 
                 onForEach = jasmine.createSpy('forEach'),
                 onMap = jasmine.createSpy('map');
@@ -364,12 +373,12 @@
         });
 
         it('should be equal', function() {
-            var model = BEM.MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
+            var model = MODEL.create('array-type-field-special', { f: [1, 2, 3] }),
                 field = model.get('f');
 
             field[0] = '';
-            model.set('f', field);	
-        
+            model.set('f', field);
+
             expect(model.get('f')).toEqual(model.get('f', 'format'));
         });
 
