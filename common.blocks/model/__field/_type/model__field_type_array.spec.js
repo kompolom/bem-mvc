@@ -1,10 +1,4 @@
-modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(provide, MODEL, sinon, $, chai) {
-    var _spy = sinon.spy;
-    sinon.spy = function() {
-        return _spy.call(sinon);
-    };
-
-    var expect = chai.expect;
+modules.define('spec', ['model', 'sinon', 'jquery', 'chai'], function(provide, MODEL, sinon, $, chai) {
 
     describe('Field with type "array"', function() {
         MODEL.decl('array-type-field', {
@@ -57,45 +51,47 @@ modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(pro
         it('should have fields', function() {
             var model = MODEL.create('array-type-field');
 
-            expect(model.hasField('f')).toBe(true);
-            expect(model.hasField('f1')).toBe(true);
-            expect(model.hasField('f2')).toBe(true);
-            expect(model.hasField('f3')).toBe(true);
-            expect(model.hasField('f4')).toBe(true);
-            expect(model.hasField('f5')).toBe(true);
+            model.hasField('f').should.be.true();
+            model.hasField('f1').should.be.true();
+            model.hasField('f2').should.be.true();
+            model.hasField('f3').should.be.true();
+            model.hasField('f4').should.be.true();
+            model.hasField('f5').should.be.true();
+        });
+
+        it('should be array', function() {
+            // console.log(MODEL.create('array-type-field').get('f1'));
+            MODEL.create('array-type-field').get('f1').should.be.instanceOf(Array);
         });
 
         it('should have default value', function() {
-            expect(MODEL.create('array-type-field').get('f1')).toEqual(['str1']);
+            MODEL.create('array-type-field').get('f1').should.eql(['str1']);
         });
 
         it('should have init value from decl', function() {
-            expect(MODEL.create('array-type-field').get('f2')).toEqual(['str2']);
+            MODEL.create('array-type-field').get('f2').should.eql(['str2']);
         });
 
         it('should have init value from create', function() {
-            expect(
                 MODEL
                     .create('array-type-field', { f: [3.14] })
-                    .get('f'))
-                .toEqual([3.14]);
+                    .get('f')
+                .should.be.eql([3.14]);
         });
 
         it('should have format value', function() {
-            expect(
                 MODEL
                     .create('array-type-field', { f3: ['AAA']})
-                    .get('f3', 'format'))
-                .toEqual('A');
+                    .get('f3', 'format')
+                .should.be.equal('A');
         });
 
         it('should set value', function() {
-            expect(
                 MODEL
                     .create('array-type-field')
                     .set('f', [3.14])
-                    .get('f'))
-                .toEqual([3.14]);
+                    .get('f')
+                .should.be.eql([3.14]);
         });
 
         it('should not change default value', function() {
@@ -105,7 +101,7 @@ modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(pro
             model.get('f').push('str');
             model.set('f', []);
 
-            expect(model.get('f')).toEqual([]);
+            model.get('f').should.be.eql([]);
         });
 
         it('should clear value', function() {
@@ -127,10 +123,10 @@ modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(pro
                 })
                 .clear('f');
 
-            expect(model.isEmpty('f')).toBe(true);
+            model.isEmpty('f').should.be.true();
 
             model.clear();
-            expect(model.isEmpty()).toBe(true);
+            model.isEmpty().should.be.true();
         });
 
         it('should show changes', function() {
@@ -145,8 +141,8 @@ modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(pro
                     f4: ['33']
                 });
 
-            expect(model.isChanged('f')).toBe(true);
-            expect(model.isChanged()).toBe(true);
+            model.isChanged('f').should.be.true();
+            model.isChanged().should.be.true();
         });
 
         it('should update models', function() {
@@ -160,9 +156,9 @@ modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(pro
                     f4: ['qwe4']
                 });
 
-            expect(model.get('f')).toEqual(['qwe']);
+            model.get('f').should.be.eqls(['qwe']);
 
-            expect(model.toJSON()).toEqual({
+            model.toJSON().should.eqls({
                 f: ['qwe'],
                 f1: ['qwe1'],
                 f2: ['qwe2'],
@@ -173,56 +169,54 @@ modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(pro
         });
 
         it('should fix and rollback values', function() {
-            expect(
-                MODEL
-                    .create('array-type-field')
-                    .set('f', [0])
-                    .fix()
-                    .set('f', [1])
-                    .rollback()
-                    .get('f'))
-                .toEqual([0]);
+            MODEL
+                .create('array-type-field')
+                .set('f', [0])
+                .fix()
+                .set('f', [1])
+                .rollback()
+                .get('f')
+            .should.be.eqls([0]);
         });
 
         it('should return data', function() {
-            expect(
-                MODEL
-                    .create('array-type-field', {
-                        f: ['up'],
-                        f1: ['up1'],
-                        f2: ['up2'],
-                        f3: ['up3'],
-                        f4: ['up']
-                    })
-                    .toJSON())
-                .toEqual({
+            MODEL
+                .create('array-type-field', {
+                    f: ['up'],
+                    f1: ['up1'],
+                    f2: ['up2'],
+                    f3: ['up3'],
+                    f4: ['up']
+                })
+                .toJSON()
+            .should.be.eqls({
                     f: ['up'],
                     f1: ['up1'],
                     f2: ['up2'],
                     f3: ['up3'],
                     f4: ['up', '4'],
                     f5: ['up', '5']
-                });
+            });
         });
 
         it('should check validation', function() {
             var model = MODEL.create('array-type-field');
 
-            expect(model
+            model
                 .set('f', ['array'])
-                .isValid())
-                .toBe(true);
+                .isValid()
+            .should.be.true();
 
-            expect(model
+            model
                 .set('f', [])
-                .isValid())
-                .toBe(false);
+                .isValid()
+            .should.be.false();
         });
 
         it('should fire changes', function() {
-            var onChange = jasmine.createSpy('onModelChange'),
-                onFieldChange = jasmine.createSpy('onFieldChange'),
-                disabledHandler = jasmine.createSpy('disabledHandler');
+            var onChange = sinon.spy(),
+                onFieldChange = sinon.spy(),
+                disabledHandler = sinon.spy();
 
             MODEL
                 .create('array-type-field')
@@ -232,9 +226,9 @@ modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(pro
                 .un('change', disabledHandler)
                 .set('f', 666);
 
-            expect(onChange).toHaveBeenCalled();
-            expect(onFieldChange).toHaveBeenCalled();
-            expect(disabledHandler).not.toHaveBeenCalled();
+            onChange.called.should.be.true();
+            onFieldChange.called.should.be.true();
+            disabledHandler.called.should.be.false();
         });
 
         it('should destruct', function() {
@@ -242,14 +236,11 @@ modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(pro
                 .create({ name: 'array-type-field', id: 'uniqModelId' })
                 .destruct();
 
-            expect(MODEL.get({ name: 'array-type-field', id: 'uniqModelId' }).length).toEqual(0);
+            MODEL.get({ name: 'array-type-field', id: 'uniqModelId' }).length.should.equals(0);
         });
 
     });
-});
-/*BEM.TEST.decl('i-model__field_type_array', function() {
-
-
+    
     describe('Field with type "array" (array methods)', function() {
         MODEL.decl('array-type-field-special', {
             f: {
@@ -384,5 +375,5 @@ modules.define('spec', ['model__field', 'sinon', 'jquery', 'chai'], function(pro
 
     });
 
+    provide();
 });
-*/
