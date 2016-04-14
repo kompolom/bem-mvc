@@ -1,19 +1,24 @@
-/*BEM.TEST.decl('i-model__field', function() {
+modules.define('spec',
+    ['model', 'sinon', 'jquery', 'chai'],
+    function(provide, MODEL, sinon, $, chai){
 
-    // COMMON FIELD
+    var expect = chai.expect;
+
+        // COMMON FIELD
     describe('Field with no type', function() {
         var simpleField,
             zeroField,
             mockModel;
 
         beforeEach(function() {
-            mockModel = jasmine.createSpyObj('mockModel', ['trigger']);
+            MODEL.decl('stubModel', {});
+            var m = new MODEL.create('stubModel');
 
-            simpleField = new BEM.MODEL.FIELD({ 'default': 1 }, mockModel);
-            zeroField = new BEM.MODEL.FIELD({ 'default': 0 }, mockModel);
+            simpleField = new MODEL.FIELD({ 'default': 1 }, m);
+            zeroField = new MODEL.FIELD({ 'default': 0 }, m);
         });
 
-        BEM.MODEL.decl('no-type-field', {
+        MODEL.decl('no-type-field', {
             f: {
                 validation: {
                     rules: {
@@ -50,61 +55,57 @@
         });
 
         it('should have fields', function() {
-            var model = BEM.MODEL.create('no-type-field');
+            var model = MODEL.create('no-type-field');
 
-            expect(model.hasField('f')).toBe(true);
-            expect(model.hasField('f1')).toBe(true);
-            expect(model.hasField('f2')).toBe(true);
-            expect(model.hasField('f3')).toBe(true);
-            expect(model.hasField('f4')).toBe(true);
-            expect(model.hasField('f5')).toBe(true);
+            model.hasField('f').should.be.true();
+            model.hasField('f1').should.be.true();
+            model.hasField('f2').should.be.true();
+            model.hasField('f3').should.be.true();
+            model.hasField('f4').should.be.true();
+            model.hasField('f5').should.be.true();
         });
 
         it('should have default value', function() {
-            expect(BEM.MODEL.create('no-type-field').get('f1')).toEqual({ val: 'str1' });
+            MODEL.create('no-type-field').get('f1').should.deep.equals({ val: 'str1' });
         });
 
         it('should have init value from decl', function() {
-            expect(BEM.MODEL.create('no-type-field').get('f2')).toEqual({ val: 'str2' });
+            MODEL.create('no-type-field').get('f2').should.deep.equals({ val: 'str2' });
         });
 
         it('should have init value from create', function() {
-            expect(
-                BEM.MODEL
-                    .create('no-type-field', { f: { val: 3.14 } })
-                    .get('f'))
-                .toEqual({ val: 3.14 });
+            MODEL
+                .create('no-type-field', { f: { val: 3.14 } })
+                .get('f')
+            .should.deep.equals({ val: 3.14 });
         });
 
         it('should have format value', function() {
-            expect(
-                BEM.MODEL
-                    .create('no-type-field', { f3: { val: 'AAA' } })
-                    .get('f3', 'format'))
-                .toEqual({ val: 'A' });
+            MODEL
+                .create('no-type-field', { f3: { val: 'AAA' } })
+                .get('f3', 'format')
+            .should.deep.equals({ val: 'A' });
         });
 
         it('should set value', function() {
-            expect(
-                BEM.MODEL
-                    .create('no-type-field')
-                    .set('f', { val: 3.14 })
-                    .get('f'))
-                .toEqual({ val: 3.14 });
+            MODEL
+                .create('no-type-field')
+                .set('f', { val: 3.14 })
+                .get('f')
+            .should.deep.equals({ val: 3.14 });
         });
 
         it('should clear value', function() {
-            expect(
-                BEM.MODEL
-                    .create('no-type-field')
-                    .set('f', { val: 1 })
-                    .clear('f')
-                    .get('f'))
-                .toBe(undefined);
+            chai.expect(MODEL
+                .create('no-type-field')
+                .set('f', { val: 1 })
+                .clear('f')
+                .get('f'))
+            .to.be.undefined();
         });
 
         it('should be empty', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('no-type-field')
                 .update({
                     f: { val: 1 },
@@ -112,14 +113,14 @@
                 })
                 .clear('f');
 
-            expect(model.isEmpty('f')).toBe(true);
+            model.isEmpty('f').should.be.true();
 
             model.clear();
-            expect(model.isEmpty()).toBe(true);
+            model.isEmpty().should.be.true();
         });
 
         it('should show changes', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('no-type-field', {
                     f: { val: 1 },
                     f1: { val: 0 },
@@ -136,13 +137,13 @@
                     f2: { val: NaN }
                 });
 
-            expect(model.isChanged('f')).toBe(true);
-            expect(model.isChanged()).toBe(true);
-            expect(model.isChanged('f6')).toBe(true);
+            model.isChanged('f').should.be.true();
+            model.isChanged().should.be.true();
+            model.isChanged('f6').should.be.true();
         });
 
         it('should update models', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('no-type-field')
                 .update({
                     f: { val: 'qwe' },
@@ -152,9 +153,9 @@
                     f4: { val: 'qwe' }
                 });
 
-            expect(model.get('f')).toEqual({ val: 'qwe' });
+            expect(model.get('f')).deep.equals({ val: 'qwe' });
 
-            expect(model.toJSON()).toEqual({
+            expect(model.toJSON()).deep.equals({
                 f: { val: 'qwe' },
                 f1: { val: 'qwe1' },
                 f2: { val: 'qwe2' },
@@ -167,19 +168,19 @@
 
         it('should fix and rollback values', function() {
             expect(
-                BEM.MODEL
+                MODEL
                     .create('no-type-field')
                     .set('f', { val: 0 })
                     .fix()
                     .set('f', { val: 1 })
                     .rollback()
                     .get('f'))
-                .toEqual({ val: 0 });
+                .deep.equal({ val: 0 });
         });
 
         it('should return data', function() {
             expect(
-                BEM.MODEL
+                MODEL
                     .create('no-type-field', {
                         f: { val: 'up' },
                         f1: { val: 'up1' },
@@ -188,7 +189,7 @@
                         f4: { val: 'up' }
                     })
                     .toJSON())
-                .toEqual({
+                .deep.equal({
                     f: { val: 'up' },
                     f1: { val: 'up1' },
                     f2: { val: 'up2' },
@@ -200,25 +201,25 @@
         });
 
         it('should check validation', function() {
-            var model = BEM.MODEL.create('no-type-field');
+            var model = MODEL.create('no-type-field');
 
             expect(model
-                    .set('f', 1.28)
-                    .isValid())
-                .toBe(true);
+                .set('f', 1.28)
+                .isValid())
+                .to.be.true();
 
             expect(model
-                    .clear()
-                    .isValid())
-                .toBe(false);
+                .clear()
+                .isValid())
+                .to.be.false();
         });
 
         it('should fire changes', function() {
-            var onChange = jasmine.createSpy('onModelChange'),
-                onFieldChange = jasmine.createSpy('onFieldChange'),
-                disabledHandler = jasmine.createSpy('disabledHandler');
+            var onChange = sinon.spy(),
+                onFieldChange = sinon.spy(),
+                disabledHandler = sinon.spy();
 
-            BEM.MODEL
+            MODEL
                 .create('no-type-field')
                 .on('change', onChange)
                 .on('change', disabledHandler)
@@ -226,72 +227,77 @@
                 .un('change', disabledHandler)
                 .set('f', { val: 666 });
 
-            expect(onChange).toHaveBeenCalled();
-            expect(onFieldChange).toHaveBeenCalled();
-            expect(disabledHandler).not.toHaveBeenCalled();
+            onChange.called.should.be.true();
+            onFieldChange.called.should.be.true();
+            disabledHandler.called.should.be.false();
         });
 
         it('should destruct', function() {
-            BEM.MODEL
+            MODEL
                 .create({ name: 'no-type-field', id: 'uniqModelId' })
                 .destruct();
 
-            expect(BEM.MODEL.get({ name: 'no-type-field', id: 'uniqModelId' }).length).toEqual(0);
+            MODEL.get({ name: 'no-type-field', id: 'uniqModelId' }).length.should.be.equal(0);
         });
 
         describe('.isNaN(value)', function() {
 
             it('should return true if first param is exactly NaN', function() {
-                expect(simpleField.isNaN(NaN)).toBe(true);
+                simpleField.isNaN(NaN).should.be.true();
             });
 
             it('should return false if first param is not exactly NaN', function() {
-                expect(simpleField.isNaN(1)).toBe(false);
-                expect(simpleField.isNaN('hello')).toBe(false);
-                expect(simpleField.isNaN({})).toBe(false);
-                expect(simpleField.isNaN([1, 2, 3])).toBe(false);
+                simpleField.isNaN(1).should.be.false();
+                simpleField.isNaN('hello').should.be.false();
+                simpleField.isNaN({}).should.be.false();
+                simpleField.isNaN([1, 2, 3]).should.be.false();
             });
         });
 
         describe('.isEqual(value)', function() {
             it('should return true if field value equal first param', function() {
                 simpleField.set(1).fixData();
-                expect(simpleField.isEqual(1)).toBe(true);
+                simpleField.isEqual(1).should.be.true();
             });
 
             it('should return true if field value is NaN and param is NaN', function() {
                 simpleField.set(NaN).fixData();
-                expect(simpleField.isEqual(NaN)).toBe(true);
+                simpleField.isEqual(NaN).should.be.true();
             });
         });
 
         describe('.isChanged()', function() {
             it('should return true if field changed', function() {
                 simpleField.set(1).fixData().set(2);
-                expect(simpleField.isChanged()).toBe(true);
+                simpleField.isChanged().should.be.true();
 
                 simpleField.set(0).fixData().set(1);
-                expect(simpleField.isChanged()).toBe(true);
+                simpleField.isChanged().should.be.true();
             });
-            
+
             it('should return false if field not changed', function() {
                 simpleField
                     .set(1)
                     .fixData()
                     .set(1);
-                expect(simpleField.isChanged()).toBe(false);
+                simpleField.isChanged().should.be.false();
             });
 
             it('should return false if set value same as default', function() {
                 simpleField.set(1);
-                expect(simpleField.isChanged()).toBe(false);
+                simpleField.isChanged().should.be.false();
             });
 
             it('should return true if set null value and default zero', function() {
                 zeroField.set(null);
-                expect(zeroField.isChanged()).toBe(true);
+                zeroField.isChanged().should.be.true();
             });
         });
     });
+
+    provide();
+});
+/*BEM.TEST.decl('i-model__field', function() {
+
 });
 */
