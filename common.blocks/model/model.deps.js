@@ -1,4 +1,7 @@
 ({
+    mustDeps : [
+        'model-aggregator',
+    ],
     shouldDeps: [
         {
             block: 'functions',
