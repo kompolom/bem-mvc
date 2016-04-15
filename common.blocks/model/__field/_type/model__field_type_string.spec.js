@@ -1,7 +1,7 @@
-/*BEM.TEST.decl('i-model__field_type_string', function() {
+modules.define('spec', ['model', 'sinon'], function(provide, MODEL, sinon){
 
     describe('Field with type "string"', function() {
-        BEM.MODEL.decl('string-type-field', {
+        MODEL.decl('string-type-field', {
             f: {
                 type: 'string',
                 validation: {
@@ -23,80 +23,80 @@
                 type: 'string',
                 value: 'str3',
                 format: function(value) {
-                    return ('' + value).charAt(0)
+                    return ('' + value).charAt(0);
                 }
             },
             f4: {
                 type: 'string',
                 preprocess: function(value) {
-                    return value && value + '4'
+                    return value && value + '4';
                 }
             },
             f5: {
                 type: 'string',
                 calculate: function(value) {
-                    return value && value + '5'
+                    return value && value + '5';
                 },
                 dependsFrom: 'f'
             }
         });
 
         it('should have fields', function() {
-            var model = BEM.MODEL.create('string-type-field');
+            var model = MODEL.create('string-type-field');
 
-            expect(model.hasField('f')).toBe(true);
-            expect(model.hasField('f1')).toBe(true);
-            expect(model.hasField('f2')).toBe(true);
-            expect(model.hasField('f3')).toBe(true);
-            expect(model.hasField('f4')).toBe(true);
-            expect(model.hasField('f5')).toBe(true);
+            model.hasField('f').should.be.true();
+            model.hasField('f1').should.be.true();
+            model.hasField('f2').should.be.true();
+            model.hasField('f3').should.be.true();
+            model.hasField('f4').should.be.true();
+            model.hasField('f5').should.be.true();
         });
 
         it('should have default value', function() {
-            expect(BEM.MODEL.create('string-type-field').get('f1')).toEqual('str1');
+            MODEL.create('string-type-field').get('f1').should.be.equal('str1');
         });
 
         it('should have init value from decl', function() {
-            expect(BEM.MODEL.create('string-type-field').get('f2')).toEqual('str2');
+            MODEL.create('string-type-field').get('f2').should.be.equal('str2');
         });
 
         it('should have init value from create', function() {
-            expect(
-                BEM.MODEL
+
+                MODEL
                     .create('string-type-field', { f: 3.14 })
-                    .get('f'))
-                .toEqual(3.14);
+                    .get('f')
+                .should.equals(3.14);
         });
 
         it('should have format value', function() {
-            expect(
-                BEM.MODEL
+
+                MODEL
                     .create('string-type-field', { f3: 'AAA'})
-                    .get('f3', 'format'))
-                .toEqual('A');
+                    .get('f3', 'format')
+                .should.equals('A');
         });
 
         it('should set value', function() {
-            expect(
-                BEM.MODEL
+
+                MODEL
                     .create('string-type-field')
                     .set('f', 3.14)
-                    .get('f'))
-                .toEqual(3.14);
+                    .get('f')
+                .should.equal(3.14);
         });
 
         it('should clear value', function() {
-            expect(
-                BEM.MODEL
+
+                MODEL
                     .create('string-type-field')
                     .set('f', 1)
                     .clear('f')
-                    .get('f'))
-                .toBe('');
+                    .get('f')
+                .should.equal('');
         });
 
         it('should be empty', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('string-type-field')
                 .update({
                     f: 1,
@@ -104,14 +104,14 @@
                 })
                 .clear('f');
 
-            expect(model.isEmpty('f')).toBe(true);
+            model.isEmpty('f').should.be.true();
 
             model.clear();
-            expect(model.isEmpty()).toBe(true);
+            model.isEmpty().should.be.true();
         });
 
         it('should show changes', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('string-type-field', {
                     f: 1,
                     f4: 3
@@ -122,12 +122,12 @@
                     f4: '33'
                 });
 
-            expect(model.isChanged('f')).toBe(true);
-            expect(model.isChanged()).toBe(true);
+            model.isChanged('f').should.be.true();
+            model.isChanged().should.be.true();
         });
 
         it('should update models', function() {
-            var model = BEM.MODEL
+            var model = MODEL
                 .create('string-type-field')
                 .update({
                     f: 'qwe',
@@ -137,9 +137,9 @@
                     f4: 'qwe'
                 });
 
-            expect(model.get('f')).toEqual('qwe');
+            model.get('f').should.be.equal('qwe');
 
-            expect(model.toJSON()).toEqual({
+            model.toJSON().should.be.eql({
                 f: 'qwe',
                 f1: 'qwe1',
                 f2: 'qwe2',
@@ -150,20 +150,20 @@
         });
 
         it('should fix and rollback values', function() {
-            expect(
-                BEM.MODEL
+
+                MODEL
                     .create('string-type-field')
                     .set('f', 0)
                     .fix()
                     .set('f', 1)
                     .rollback()
-                    .get('f'))
-                .toEqual(0);
+                    .get('f')
+                .should.be.equal(0);
         });
 
         it('should return data', function() {
-            expect(
-                BEM.MODEL
+
+                MODEL
                     .create('string-type-field', {
                         f: 'up',
                         f1: 'up1',
@@ -171,8 +171,8 @@
                         f3: 'up3',
                         f4: 'up'
                     })
-                    .toJSON())
-                .toEqual({
+                    .toJSON()
+                .should.be.eql({
                     f: 'up',
                     f1: 'up1',
                     f2: 'up2',
@@ -183,25 +183,25 @@
         });
 
         it('should check validation', function() {
-            var model = BEM.MODEL.create('string-type-field');
+            var model = MODEL.create('string-type-field');
 
-            expect(model
+            model
                 .set('f', 'string')
-                .isValid())
-                .toBe(true);
+                .isValid()
+                .should.be.true();
 
-            expect(model
+            model
                 .set('f', 'loooooooooong string')
-                .isValid())
-                .toBe(false);
+                .isValid()
+                .should.be.false();
         });
 
         it('should fire changes', function() {
-            var onChange = jasmine.createSpy('onModelChange'),
-                onFieldChange = jasmine.createSpy('onFieldChange'),
-                disabledHandler = jasmine.createSpy('disabledHandler');
+            var onChange = sinon.spy(),
+                onFieldChange = sinon.spy(),
+                disabledHandler = sinon.spy();
 
-            BEM.MODEL
+            MODEL
                 .create('string-type-field')
                 .on('change', onChange)
                 .on('change', disabledHandler)
@@ -209,20 +209,21 @@
                 .un('change', disabledHandler)
                 .set('f', 666);
 
-            expect(onChange).toHaveBeenCalled();
-            expect(onFieldChange).toHaveBeenCalled();
-            expect(disabledHandler).not.toHaveBeenCalled();
+            onChange.called.should.be.true();
+            onFieldChange.called.should.be.true();
+            disabledHandler.called.should.be.false();
         });
 
         it('should destruct', function() {
-            BEM.MODEL
+            MODEL
                 .create({ name: 'string-type-field', id: 'uniqModelId' })
                 .destruct();
 
-            expect(BEM.MODEL.get({ name: 'string-type-field', id: 'uniqModelId' }).length).toEqual(0);
+
+            MODEL.get({ name: 'string-type-field', id: 'uniqModelId' }).length.should.be.equal(0);
         });
 
     });
 
+    provide();
 });
-*/
