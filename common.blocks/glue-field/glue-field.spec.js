@@ -1,6 +1,8 @@
-/*
-BEM.TEST.decl('i-glue-field', function() {
-    BEM.MODEL.decl('glue-field-model', {
+modules.define('spec',
+               ['glue-field', 'glue', 'model', 'i-bem__dom', 'BEMHTML', 'jquery', 'sinon'],
+               function(provide, GField, Glue, MODEL, BEMDOM, BEMHTML, $, sinon) {
+
+    MODEL.decl('glue-field-model', {
         num: 'number',
         str: 'string'
     });
@@ -8,7 +10,7 @@ BEM.TEST.decl('i-glue-field', function() {
 
     describe('glue field', function() {
 
-        BEM.DOM.decl('b-glued-field', {
+        BEMDOM.decl('b-glued-field', {
             onSetMod: {
                 js: function() {
 
@@ -18,10 +20,10 @@ BEM.TEST.decl('i-glue-field', function() {
 
         it('should glue field', function() {
 
-            BEM.DOM.append('body', BEMHTML.apply({
+            BEMDOM.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
-                    block: 'i-glue',
+                    block: 'glue',
                     js: {
                         modelName: 'glue-field-model',
                         modelData: {
@@ -35,7 +37,7 @@ BEM.TEST.decl('i-glue-field', function() {
                     {
                         elem: 'bla',
                         mix: [{
-                            block: 'i-glue',
+                            block: 'glue',
                             elem: 'model-field',
                             js: {
                                 name: 'num'
@@ -46,18 +48,18 @@ BEM.TEST.decl('i-glue-field', function() {
                 ]
             }));
 
-            expect($('.b-glued-field').bem('b-glued-field').findBlockInside('i-glue').getFieldBlock('num').get()).toEqual(123);
+            $('.b-glued-field').bem('b-glued-field').findBlockInside('glue').getFieldBlock('num').get().should.be.equal(123);
 
             $('.b-glued-field').remove();
-            BEM.MODEL.getOne('glue-field-model').destruct();
+            MODEL.getOne('glue-field-model').destruct();
         });
 
         it('should glue field with mod', function() {
 
-            BEM.DOM.append('body', BEMHTML.apply({
+            BEMDOM.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
-                    block: 'i-glue',
+                    block: 'glue',
                     js: {
                         modelName: 'glue-field-model',
                         modelData: {
@@ -71,7 +73,7 @@ BEM.TEST.decl('i-glue-field', function() {
                     {
                         elem: 'bla',
                         mix: [{
-                            block: 'i-glue',
+                            block: 'glue',
                             elem: 'model-field',
                             js: {
                                 name: 'num'
@@ -82,22 +84,22 @@ BEM.TEST.decl('i-glue-field', function() {
                 ]
             }));
 
-            expect($('.b-glued-field').bem('b-glued-field').findBlockInside('i-glue').getFieldBlock('num').get()).toEqual(123);
+            $('.b-glued-field').bem('b-glued-field').findBlockInside('glue').getFieldBlock('num').get().should.be.equal(123);
 
             $('.b-glued-field').remove();
-            BEM.MODEL.getOne('glue-field-model').destruct();
+            MODEL.getOne('glue-field-model').destruct();
         });
 
         it('should unbuind from model when destructed', function() {
-            var model = BEM.MODEL.create('glue-field-model', {
+            var model = MODEL.create('glue-field-model', {
                 num: 123,
                 str: 'abc'
             });
 
-            BEM.DOM.append('body', BEMHTML.apply({
+            BEMDOM.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
-                    block: 'i-glue',
+                    block: 'glue',
                     js: {
                         modelName: 'glue-field-model',
                         modelId: model.id
@@ -108,7 +110,7 @@ BEM.TEST.decl('i-glue-field', function() {
                     {
                         elem: 'bla',
                         mix: [{
-                            block: 'i-glue',
+                            block: 'glue',
                             elem: 'model-field',
                             js: {
                                 name: 'num'
@@ -120,55 +122,54 @@ BEM.TEST.decl('i-glue-field', function() {
             }));
 
             var block = $('.b-glued-field').bem('b-glued-field');
-            block.destruct();
+            BEMDOM.destruct(block.domElem); // Не совсем понял что было в оригинале.
 
-            expect(function() {
-                model.set('num', 1);
-            }).not.toThrow();
+            var fn = function() { model.set('num', 1); };
+            fn.should.not.throw();
+        });
+
+        it('glue field baseBlock', function() {
+
+            BEMDOM.decl({ block: 'b-base-glued-field', baseBlock: Glue }, {
+                onSetMod: {
+                    js: function() {
+                        this.__base();
+                    }
+                }
+            });
+
+            BEMDOM.append('body', BEMHTML.apply({
+                block: 'b-base-glued-field',
+                js: {
+                    modelName: 'glue-field-model',
+                    modelData: {
+                        num: 123,
+                        str: 'abc'
+                    }
+                },
+                content: [
+                    {
+                        elem: 'bla',
+                        mix: [{
+                            block: 'b-base-glued-field',
+                            elem: 'model-field',
+                            js: {
+                                name: 'str'
+                            }
+                        }],
+                        content: 'str'
+                    }
+                ]
+            }));
+
+            $('.b-base-glued-field').bem('b-base-glued-field').getFieldBlock('str').get().should.be.equal('abc');
+
+            $('.b-base-glued-field').remove();
+            MODEL.getOne('glue-field-model').destruct();
         });
 
     });
 
-    describe('glue field baseBlock', function() {
 
-        BEM.DOM.decl({ block: 'b-base-glued-field', baseBlock: 'i-glue' }, {
-            onSetMod: {
-                js: function() {
-                    this.__base();
-                }
-            }
-        });
-
-        BEM.DOM.append('body', BEMHTML.apply({
-            block: 'b-base-glued-field',
-            js: {
-                modelName: 'glue-field-model',
-                modelData: {
-                    num: 123,
-                    str: 'abc'
-                }
-            },
-            content: [
-                {
-                    elem: 'bla',
-                    mix: [{
-                        block: 'b-base-glued-field',
-                        elem: 'model-field',
-                        js: {
-                            name: 'str'
-                        }
-                    }],
-                    content: 'str'
-                }
-            ]
-        }));
-
-        expect($('.b-base-glued-field').bem('b-base-glued-field').getFieldBlock('str').get()).toEqual('abc');
-
-        $('.b-base-glued-field').remove();
-        BEM.MODEL.getOne('glue-field-model').destruct();
-    });
-
-
+    provide();
 });
-*/
