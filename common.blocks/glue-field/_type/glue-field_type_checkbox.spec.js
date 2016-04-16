@@ -1,8 +1,8 @@
-/*
-BEM.TEST.decl('i-glue-field_type_checkbox', function() {
-    if (!BEM.blocks['checkbox']) return;
+modules.define('spec',
+               ['glue-field', 'glue', 'model', 'sinon', 'i-bem__dom', 'BEMHTML', 'jquery'],
+               function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $) {
 
-    BEM.MODEL.decl('glue-field-checkbox-model', {
+    MODEL.decl('glue-field-checkbox-model', {
         num: 'number',
         str: 'string',
         bool: 'boolean'
@@ -11,7 +11,7 @@ BEM.TEST.decl('i-glue-field_type_checkbox', function() {
 
     describe('glue field type checkbox', function() {
 
-        BEM.DOM.decl('b-glued-field', {
+        BEMDOM.decl('b-glued-field', {
             onSetMod: {
                 js: function() {
                 }
@@ -25,16 +25,16 @@ BEM.TEST.decl('i-glue-field_type_checkbox', function() {
         });
 
         it('should glue field', function() {
-            model = BEM.MODEL.create('glue-field-checkbox-model', {
+            model = MODEL.create('glue-field-checkbox-model', {
                 num: 1,
                 str: 's',
                 bool: false
             });
 
-            BEM.DOM.append('body', BEMHTML.apply({
+            BEMDOM.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
-                    block: 'i-glue',
+                    block: 'glue',
                     js: {
                         modelName: 'glue-field-checkbox-model',
                         modelId: model.id
@@ -45,7 +45,7 @@ BEM.TEST.decl('i-glue-field_type_checkbox', function() {
                     {
                         block: 'checkbox',
                         mix: [{
-                            block: 'i-glue',
+                            block: 'glue',
                             elem: 'model-field',
                             js: {
                                 name: 'bool',
@@ -62,19 +62,19 @@ BEM.TEST.decl('i-glue-field_type_checkbox', function() {
             var block = $('.b-glued-field').bem('b-glued-field'),
                 checkbox = block.findBlockInside('checkbox');
 
-            expect(checkbox.isChecked()).toEqual(false);
+            checkbox.hasMod('checked').should.be.equal(false);
 
             model.set('bool', true);
-            expect(checkbox.isChecked()).toEqual(true);
+            checkbox.hasMod('checked').should.be.equal(true);
 
             setTimeout(function() {
                 checkbox.delMod('checked');
-                expect(model.get('bool')).toEqual(false);
+                model.get('bool').should.be.equal(false);
             }, 100);
         });
 
 
     });
 
+    provide();
 });
-*/
