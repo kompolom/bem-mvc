@@ -1,4 +1,4 @@
-({
+([{
     shouldDeps: [
         {
             mods: {
@@ -10,6 +10,13 @@
                     'mod',
                 ]
             }
-        }
+        },
+        'glue'
     ]
-})
+},
+{
+    tech : 'spec.js',
+    mustDeps : [
+        { block : 'model', tech : 'js' }
+    ]
+}])

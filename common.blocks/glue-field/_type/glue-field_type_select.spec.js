@@ -1,8 +1,8 @@
-/*
-BEM.TEST.decl('i-glue-field_type_select', function() {
-    if (!BEM.blocks['select']) return;
+modules.define('spec',
+['glue-field', 'glue', 'model', 'sinon', 'i-bem__dom', 'BEMHTML', 'jquery', 'menu', 'select', 'menu-item'],
+function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $, Menu, Select, MenuItem) {
 
-    BEM.MODEL.decl('glue-field-select-model', {
+    MODEL.decl('glue-field-select-model', {
         num: 'number',
         str: 'string'
     });
@@ -10,7 +10,7 @@ BEM.TEST.decl('i-glue-field_type_select', function() {
 
     describe('glue field type select', function() {
 
-        BEM.DOM.decl('b-glued-field', {
+        BEMDOM.decl('b-glued-field', {
             onSetMod: {
                 js: function() {
                 }
@@ -24,15 +24,15 @@ BEM.TEST.decl('i-glue-field_type_select', function() {
         });
 
         it('should glue field', function() {
-            model = BEM.MODEL.create('glue-field-select-model', {
+            model = MODEL.create('glue-field-select-model', {
                 num: 1,
                 str: 's'
             });
 
-            BEM.DOM.append('body', BEMHTML.apply({
+            BEMDOM.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
-                    block: 'i-glue',
+                    block: 'glue',
                     js: {
                         modelName: 'glue-field-select-model',
                         modelId: model.id
@@ -43,7 +43,7 @@ BEM.TEST.decl('i-glue-field_type_select', function() {
                     {
                         block: 'select',
                         mix: [{
-                            block: 'i-glue',
+                            block: 'glue',
                             elem: 'model-field',
                             js: {
                                 name: 'str',
@@ -51,13 +51,9 @@ BEM.TEST.decl('i-glue-field_type_select', function() {
                             }
                         }],
                         name: 'title',
-                        value: '',
-                        mods: { size: 'm', theme: 'normal' },
-                        content: [
-                            {
-                                block: 'button',
-                                content: 'абаПбаАаВаЛаЕаНаНбаЕ'
-                            },
+                        val: 'a',
+                        mods: { size: 'm', theme: 'islands', mode : 'radio' },
+                        options: [
                             {
                                 elem: 'control',
                                 content: [
@@ -87,14 +83,14 @@ BEM.TEST.decl('i-glue-field_type_select', function() {
                 select = block.findBlockInside('select');
 
             model.set('str', 'b');
-            expect(select.val()).toEqual('b');
+            select.getVal().should.be.equal('b');
 
-            select.val('c');
-            expect(model.get('str')).toEqual('c');
+            select.setVal('c');
+            model.get('str').should.be.equal('c');
         });
 
 
     });
 
+    provide();
 });
-*/

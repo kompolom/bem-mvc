@@ -1,6 +1,8 @@
-/*
-BEM.TEST.decl('i-glue-field_type_mod', function() {
-    BEM.MODEL.decl('glue-field-mod-model', {
+modules.define('spec',
+               ['glue-field', 'glue', 'model', 'sinon', 'i-bem__dom', 'BEMHTML', 'jquery'],
+               function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $) {
+
+    MODEL.decl('glue-field-mod-model', {
         num: 'number',
         str: 'string',
         bool: 'boolean'
@@ -9,7 +11,7 @@ BEM.TEST.decl('i-glue-field_type_mod', function() {
 
     describe('glue field type mod', function() {
 
-        BEM.DOM.decl('b-glued-field', {
+        BEMDOM.decl('b-glued-field', {
             onSetMod: {
                 js: function() {
                 }
@@ -23,15 +25,15 @@ BEM.TEST.decl('i-glue-field_type_mod', function() {
         });
 
         it('should glue field', function() {
-            model = BEM.MODEL.create('glue-field-mod-model', {
+            model = MODEL.create('glue-field-mod-model', {
                 num: 1,
                 str: 'a'
             });
 
-            BEM.DOM.append('body', BEMHTML.apply({
+            BEMDOM.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
-                    block: 'i-glue',
+                    block: 'glue',
                     js: {
                         modelName: 'glue-field-mod-model',
                         modelId: model.id
@@ -42,7 +44,7 @@ BEM.TEST.decl('i-glue-field_type_mod', function() {
                     {
                         elem: 'bla-str',
                         mix: [{
-                            block: 'i-glue',
+                            block: 'glue',
                             elem: 'model-field',
                             js: {
                                 name: 'str',
@@ -57,7 +59,7 @@ BEM.TEST.decl('i-glue-field_type_mod', function() {
                     {
                         elem: 'bla-bool',
                         mix: [{
-                            block: 'i-glue',
+                            block: 'glue',
                             elem: 'model-field',
                             js: {
                                 name: 'bool',
@@ -75,14 +77,14 @@ BEM.TEST.decl('i-glue-field_type_mod', function() {
             var block = $('.b-glued-field').bem('b-glued-field');
 
             model.set('str', 'bla-bla');
-            expect(block.getMod(block.elem('bla-str'), 'test')).toEqual('bla-bla');
+            block.getMod(block.elem('bla-str'), 'test').should.be.equal('bla-bla');
 
             model.set('bool', true);
-            expect(block.getMod(block.elem('bla-bool'), 'test')).toEqual('yes');
+            block.hasMod(block.elem('bla-bool'), 'test').should.be.true();
         });
 
 
     });
 
+    provide();
 });
-*/

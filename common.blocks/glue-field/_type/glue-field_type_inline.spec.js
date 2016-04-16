@@ -1,13 +1,15 @@
-/*
-BEM.TEST.decl('i-glue-field_type_inline', function() {
-    BEM.MODEL.decl('glue-field-inline-model', {
+modules.define('spec',
+               ['glue-field', 'glue', 'model', 'sinon', 'i-bem__dom', 'BEMHTML', 'jquery'],
+               function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $) {
+
+    MODEL.decl('glue-field-inline-model', {
         num: 'number',
         str: 'string'
     });
 
     describe('glue field type inline', function() {
 
-        BEM.DOM.decl('b-glued-field', {
+        BEMDOM.decl('b-glued-field', {
             onSetMod: {
                 js: function() {
                 }
@@ -21,15 +23,15 @@ BEM.TEST.decl('i-glue-field_type_inline', function() {
         });
 
         it('should glue field', function() {
-            model = BEM.MODEL.create('glue-field-inline-model', {
+            model = MODEL.create('glue-field-inline-model', {
                 num: 1,
                 str: 'a'
-            })
+            });
 
-            BEM.DOM.append('body', BEMHTML.apply({
+            BEMDOM.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
-                    block: 'i-glue',
+                    block: 'glue',
                     js: {
                         modelName: 'glue-field-inline-model',
                         modelId: model.id
@@ -40,7 +42,7 @@ BEM.TEST.decl('i-glue-field_type_inline', function() {
                     {
                         elem: 'bla',
                         mix: [{
-                            block: 'i-glue',
+                            block: 'glue',
                             elem: 'model-field',
                             js: {
                                 name: 'num',
@@ -53,11 +55,11 @@ BEM.TEST.decl('i-glue-field_type_inline', function() {
             }));
 
             model.set('num', 42);
-            expect($('.b-glued-field').bem('b-glued-field').elem('bla').text()).toEqual('42.00');
+            $('.b-glued-field').bem('b-glued-field').elem('bla').text().should.be.equal('42.00');
         });
 
 
     });
 
+    provide();
 });
-*/
