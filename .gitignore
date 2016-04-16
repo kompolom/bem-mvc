@@ -7,6 +7,7 @@ node_modules
 .bem/cache
 .enb/tmp
 desktop.sets
+specs
 desktop.bundles/*/*.*
 !desktop.bundles/*/*.bemjson.js
 !desktop.bundles/.bem/*
