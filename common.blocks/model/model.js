@@ -701,22 +701,16 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
     /**
      * Возвращает созданный или создает экземпляр модели
      * @param {Object|String} modelParams @see get.modelParams
-     * @returns {BEM.MODEL|undefined}
+     * @param {Object} [opts] дополнительные данные для события
+     * @returns {MODEL|undefined}
      */
-    getOrCreate: function(modelParams) {
+    getOrCreate: function(modelParams, opts) {
         if (typeof modelParams === 'string') modelParams = { name: modelParams };
-
-        var model = MODEL.getOne(modelParams);
-
-        if (!model) {
-            model = MODEL.create(
-                modelParams.name,
-                MODEL.modelsData[modelParams.name][MODEL.buildPath(modelParams)] || {});
-        }
+        var modelData = MODEL.modelsData[modelParams.name];
 
         return MODEL.getOne(modelParams) || MODEL.create(
-            modelParams.name,
-            MODEL.modelsData[modelParams.name][MODEL.buildPath(modelParams)] || {});
+            modelParams,
+            modelData && modelData[MODEL.buildPath(modelParams)] || {}, opts);
     },
 
     /**
