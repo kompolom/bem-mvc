@@ -1,6 +1,6 @@
 modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl({ block: 'glue-field_type_select', baseBlock: 'glue-field' }, {
+provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'select' }, {
     onSetMod: {
         js: {
             inited: function() {

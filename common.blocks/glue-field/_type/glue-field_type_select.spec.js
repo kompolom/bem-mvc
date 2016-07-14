@@ -54,26 +54,9 @@ function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $, Menu, Select, 
                         val: 'a',
                         mods: { size: 'm', theme: 'islands', mode : 'radio' },
                         options: [
-                            {
-                                elem: 'control',
-                                content: [
-                                    {
-                                        elem: 'option',
-                                        attrs: { value: 'a' },
-                                        content: 'a'
-                                    },
-                                    {
-                                        elem: 'option',
-                                        attrs: { value: 'b' },
-                                        content: 'b'
-                                    },
-                                    {
-                                        elem: 'option',
-                                        attrs: { value: 'c' },
-                                        content: 'c'
-                                    }
-                                ]
-                            }
+                            { text : 'a', val : 'a' },
+                            { text : 'b', val : 'b' },
+                            { text : 'c', val : 'c' },
                         ]
                     }
                 ]

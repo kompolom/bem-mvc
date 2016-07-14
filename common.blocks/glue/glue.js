@@ -1,7 +1,7 @@
 modules.define(
     'glue',
-    ['i-bem__dom', 'objects', 'jquery', 'model'],
-    function(provide, BEMDOM, objects, $, MODEL) {
+    ['i-bem__dom', 'i-bem__internal', 'objects', 'jquery', 'model'],
+    function(provide, BEMDOM, INTERNAL, objects, $, MODEL) {
 
 /**
  * Блок для проклеивания моделей и DOM
@@ -17,6 +17,8 @@ provide(BEMDOM.decl('glue', {
             }
         }
     },
+
+    _fields : {},
 
     /**
      * Проклеить BEM-блоки полей с полями модели
@@ -56,13 +58,12 @@ provide(BEMDOM.decl('glue', {
      * @private
      */
     _initFields: function() {
-        var _this = this;
 
         this._fields = {};
 
         this.findElem('model-field').each(function(i, elem) {
-            _this.initFieldBlock($(elem));
-        });
+            this.initFieldBlock($(elem));
+        }.bind(this));
 
         return this;
     },
@@ -85,7 +86,12 @@ provide(BEMDOM.decl('glue', {
             fieldParams.type || (fieldParams.type = this.getMod(elem, 'type'));
 
             var type = fieldParams.type,
-                block = new BEMDOM.blocks['glue-field' + (type ? '_type_' + type : '')](elem, fieldParams, true);
+                cls = INTERNAL.buildClasses('glue-field', { type : type });
+
+            // Миксуем блок glue-field
+            elem.addClass(cls);
+            var block = this.findBlockOn(elem, 'glue-field');
+            block.params = fieldParams; // Передавать параметры через атрибут накладно. Передаем их после инициализации
 
             this._fields[fieldParams.name] = block;
             block.init(this.model);

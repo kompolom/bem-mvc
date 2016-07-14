@@ -1,6 +1,6 @@
 modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl({ block: 'glue-field_type_checkbox', baseBlock: 'glue-field' }, {
+provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'checkbox'}, {
 
     onSetMod: {
         js: {

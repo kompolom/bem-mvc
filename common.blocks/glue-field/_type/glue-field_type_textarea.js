@@ -1,6 +1,6 @@
 modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
 
-provide(BEMDOM.decl({ block: 'glue-field_type_textarea', baseBlock: 'glue-field_type_input' }, {
+provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'textarea' }, {
 
     onSetMod: {
         js: {
