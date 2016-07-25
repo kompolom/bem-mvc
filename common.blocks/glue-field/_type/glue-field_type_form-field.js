@@ -39,7 +39,7 @@ modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
         },
 
         onFieldChange: function(e, data) {
-            this.ff.hasMod('focused') || this.input.setVal(data.value);
+            this.ff.hasMod('focused') || this.ff.setVal(data.value);
         },
 
         onFieldError : function(e, err) {
