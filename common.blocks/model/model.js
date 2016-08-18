@@ -490,7 +490,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      */
     modelsData: {},
 
-        /**
+     /**
      * Хранилища обработчиков событий на моделях и полях
      */
     modelsTriggers: {},
