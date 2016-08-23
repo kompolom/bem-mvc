@@ -225,6 +225,10 @@ modules.define(
             return this;
         },
 
+        isChanged : function(){
+            return JSON.stringify(this.getFixedValue()) !== JSON.stringify(this.toJSON());
+        },
+
         /**
          * Задать новое значение для поля
          * @param {Array} value

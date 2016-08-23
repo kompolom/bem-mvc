@@ -72,6 +72,10 @@ modules.define(
         set: function(value, opts) {
             return this._set(value, opts);
         },
+        
+        isChanged : function(){
+            return JSON.stringify(this.getFixedValue()) !== JSON.stringify(this.toJSON());
+        },
 
         /**
          * Проапдейтить модель данными
