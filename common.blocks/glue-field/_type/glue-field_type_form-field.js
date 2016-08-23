@@ -33,13 +33,13 @@ modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
             if(!this.ff.getDirty())
                 return;
             // Код ниже должен быть в bem-forms
-            this.ff._initVal = this.model.get(this.name);
+            this.ff._initVal = this.model.get(this.name, 'format');
             this.ff._dirty = false;
             this.ff.delMod('dirty');
         },
 
-        onFieldChange: function(e, data) {
-            this.ff.hasMod('focused') || this.ff.setVal(data.value);
+        onFieldChange: function(e) {
+            this.ff.hasMod('focused') || this.ff.setVal(e.target.format());
         },
 
         onFieldError : function(e, err) {
