@@ -542,7 +542,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
         MODEL.decls[decl.model] = fields;
 
         staticProps && objects.each(staticProps, function(props, name) {
-            if (name in MODEL.prototype) throw new Error('method "' + name + '" is protected');
+            if (name in MODEL.prototype && name !== '__constructor') throw new Error('method "' + name + '" is protected');
         });
         constructorsCache[decl.model] = inherit(constructorsCache[decl.baseModel] || MODEL, staticProps);
 
