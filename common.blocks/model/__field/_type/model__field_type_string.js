@@ -21,11 +21,17 @@ MODEL.FIELD.types.string = inherit(MODEL.FIELD, {
             validate: function(curValue, ruleValue, name) {
                 return curValue.length <= ruleValue;
             }
+        }, minLength = {
+            value: -Infinity,
+            validate: function(curValue, ruleValue, name) {
+                return curValue.length >= ruleValue;
+            }
         };
 
         return objects.extend(this._commonRules(), {
             maxlength: maxLength,
-            maxLength: maxLength
+            maxLength: maxLength,
+            minLength: minLength
         })
     }
 
