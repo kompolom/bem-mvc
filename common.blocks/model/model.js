@@ -425,7 +425,12 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * Удаляет модель из хранилища
      */
     destruct: function() {
-        this.__self.destruct(this);
+        objects.each(this.fields, function(field) {
+            field.destruct();
+        });
+        this.trigger('destruct', { model: this });
+        modelsGroupsCache[this.name] = null;
+        MODEL.models[this.name][this.path()] = null;
     },
 
     /**
@@ -542,7 +547,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
         MODEL.decls[decl.model] = fields;
 
         staticProps && objects.each(staticProps, function(props, name) {
-            if (name in MODEL.prototype && name !== '__constructor') throw new Error('method "' + name + '" is protected');
+            //if (name in MODEL.prototype && name !== '__constructor') throw new Error('method "' + name + '" is protected');
         });
         constructorsCache[decl.model] = inherit(constructorsCache[decl.baseModel] || MODEL, staticProps);
 
@@ -723,7 +728,6 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * @returns {MODEL}
      */
     on: function(modelParams, field, e, fn, ctx) {
-        console.log('MODEL.on called');
         if (functions.isFunction(e)) {
             ctx = fn;
             fn = e;
@@ -847,7 +851,6 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * @private
      */
     _bindToModel: function(model) {
-        console.log('_bindToModel called');
 
         return this._bindToEvents(model, MODEL.modelsTriggers[model.name]);
     },
@@ -932,13 +935,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
             };
 
         MODEL.forEachModel(function() {
-
-            objects.each(this.fields, function(field) {
-                field.destruct();
-            });
-
-            MODEL.models[this.name][this.path()] = null;
-            this.trigger('destruct', { model: this });
+            this.destruct();
         }, modelParams, true);
 
         modelsGroupsCache[modelParams.name] = null;
