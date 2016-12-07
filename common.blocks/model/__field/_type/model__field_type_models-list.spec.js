@@ -19,9 +19,6 @@ modules.define('spec', ['model', 'sinon'], function(provide, MODEL, sinon){
             model.destruct();
         });
 
-        // для корректной работы тестов необходимо вызывать destruct у модели после каждого теста
-        // TODO вынести в afterEach();
-
         it('should create model and set data', function() {
             model = MODEL.create('model-list-type-field');
 
@@ -86,11 +83,12 @@ modules.define('spec', ['model', 'sinon'], function(provide, MODEL, sinon){
 
             model.clear('list');
             model.rollback();
-            model.toJSON().should.eql({ list: [{ id:1, f: 'f1' }, { id: 2, f: 'f2' }] });
+            JSON.stringify(model.toJSON()).should.eql(JSON.stringify({ list: [{ id:1, f: 'f1' }, { id: 2, f: 'f2' }] }));
 
             model.get('list').getByIndex(0).set('f', 123);
             model.rollback();
-            model.toJSON().should.eql({ list: [{ id:1, f: 'f1' },{ id: 2, f: 'f2' }] });
+            JSON.stringify(model.toJSON()).should.eql(JSON.stringify({ list: [{ id:1, f: 'f1' }, { id: 2, f: 'f2' }] }));
+            //model.toJSON().should.eql({ list: [{ id:1, f: 'f1' },{ id: 2, f: 'f2' }] });
 
             model.destruct();
             MODEL.get('list-inner-model').length.should.be.equal(0);

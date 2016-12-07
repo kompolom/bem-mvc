@@ -723,6 +723,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * @returns {MODEL}
      */
     on: function(modelParams, field, e, fn, ctx) {
+        console.log('MODEL.on called');
         if (functions.isFunction(e)) {
             ctx = fn;
             fn = e;
@@ -766,6 +767,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * @returns {MODEL}
      */
     un: function(modelParams, field, e, fn, ctx) {
+        console.log('MODEL.un called');
         if (functions.isFunction(e)) {
             ctx = fn;
             fn = e;
@@ -845,6 +847,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * @private
      */
     _bindToModel: function(model) {
+        console.log('_bindToModel called');
 
         return this._bindToEvents(model, MODEL.modelsTriggers[model.name]);
     },
@@ -856,6 +859,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * @private
      */
     _bindToFields: function(model) {
+        console.log('_bindToFields called');
         var _this = this,
             fields = this.fieldsTriggers[model.name];
 
@@ -903,9 +907,11 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
         MODEL.models[model.name][model.path()] = model;
         modelsGroupsCache[model.name] = null;
 
+        /*
         MODEL
             ._bindToModel(model)
             ._bindToFields(model);
+        */
 
         return this;
     },

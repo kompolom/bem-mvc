@@ -203,12 +203,14 @@ modules.define(
                 };
             });
 
+            /*
             MODEL.on({ name: field.params.modelName, parentModel: field.model }, 'create', function(e, data) {
                 setTimeout(function() {
                     if (data.model && list._getIndex(data.model.id) === undefined)
                         list.add(data.model);
                 }, 0);
             });
+            */
 
             return list;
         },
