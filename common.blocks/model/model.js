@@ -425,7 +425,12 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * Удаляет модель из хранилища
      */
     destruct: function() {
-        this.__self.destruct(this);
+        objects.each(this.fields, function(field) {
+            field.destruct();
+        });
+        this.trigger('destruct', { model: this });
+        modelsGroupsCache[this.name] = null;
+        MODEL.models[this.name][this.path()] = null;
     },
 
     /**
@@ -766,6 +771,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * @returns {MODEL}
      */
     un: function(modelParams, field, e, fn, ctx) {
+        console.log('MODEL.un called');
         if (functions.isFunction(e)) {
             ctx = fn;
             fn = e;
@@ -856,6 +862,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
      * @private
      */
     _bindToFields: function(model) {
+        console.log('_bindToFields called');
         var _this = this,
             fields = this.fieldsTriggers[model.name];
 
@@ -903,9 +910,11 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
         MODEL.models[model.name][model.path()] = model;
         modelsGroupsCache[model.name] = null;
 
+        /*
         MODEL
             ._bindToModel(model)
             ._bindToFields(model);
+        */
 
         return this;
     },
@@ -926,13 +935,7 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
             };
 
         MODEL.forEachModel(function() {
-
-            objects.each(this.fields, function(field) {
-                field.destruct();
-            });
-
-            MODEL.models[this.name][this.path()] = null;
-            this.trigger('destruct', { model: this });
+            this.destruct();
         }, modelParams, true);
 
         modelsGroupsCache[modelParams.name] = null;
