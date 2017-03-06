@@ -16,8 +16,14 @@ provide(BEMDOM.decl('glue-field', {
      * @param model
      */
     init: function(model) {
-        this.model = model;
+        var path = this.params.name.split('.');
         this.name || (this.name = this.params.name);
+        this.model = model;
+
+        if(path.length == 2) {
+            this.name = path[1];
+            this.model = model.get(path[0]);
+        }
 
         this.model.on(this.name, 'change', this.onFieldChange, this);
 
