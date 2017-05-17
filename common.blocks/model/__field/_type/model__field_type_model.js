@@ -129,7 +129,7 @@ modules.define(
          * @returns {Object}
          */
         toJSON: function() {
-            return this._value.toJSON();
+            return this._value.toJSON.apply(this._value, arguments);
         },
 
         /**

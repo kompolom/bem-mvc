@@ -276,8 +276,9 @@ modules.define(
          * @returns {Array}
          */
         toJSON: function() {
+            var args = arguments;
             return this._raw.map(function(model) {
-                return model.toJSON();
+                return model.toJSON.apply(model, args);
             }, this);
         },
 
