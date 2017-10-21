@@ -342,6 +342,9 @@ var MODEL = inherit(events.Emitter, /** @lends MODEL.prototype */ {
             !field ?
                 this.__base(e, data, fn, ctx) :
                 field.split(' ').forEach(function(name) {
+                    if(!this.fields[name]) {
+                        throw new Error(`Model ${this.name} have not field ${name}`);
+                    }
                     this.fields[name].on(e, data, fn, ctx);
                 }, this);
 
