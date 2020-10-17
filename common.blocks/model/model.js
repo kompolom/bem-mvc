@@ -1020,10 +1020,9 @@ provide(MODEL);
 
 });
 
-// todo: переименовать модуль согласно имени
-modules.define('i-model', ['i-bem__dom', 'model'], function(provide, BEMDOM, MODEL) {
+modules.define('i-model', ['i-bem-dom', 'model'], function(provide, bemDom, MODEL) {
 
-provide(BEMDOM.decl({ block : 'model' }, /** @lends link.prototype */{
+provide(bemDom.declBlock('model', {
     onSetMod: {
         js: {
             inited: function() {

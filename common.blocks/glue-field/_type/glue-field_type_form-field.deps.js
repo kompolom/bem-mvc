@@ -1,4 +1,3 @@
 ({
-    mustDeps: [],
-    shouldDeps: []
+    shouldDeps: ['form-field']
 })

@@ -1,6 +1,6 @@
 modules.define('spec',
-               ['glue-field', 'glue', 'model', 'i-bem__dom', 'BEMHTML', 'jquery', 'sinon'],
-               function(provide, GField, Glue, MODEL, BEMDOM, BEMHTML, $, sinon) {
+               ['glue-field', 'glue', 'model', 'i-bem-dom', 'BEMHTML', 'jquery', 'sinon'],
+               function(provide, GField, Glue, MODEL, bemDom, BEMHTML, $, sinon) {
 
     MODEL.decl('glue-field-model', {
         num: 'number',
@@ -10,7 +10,7 @@ modules.define('spec',
 
     describe('glue field', function() {
 
-        BEMDOM.decl('b-glued-field', {
+        bemDom.decl('b-glued-field', {
             onSetMod: {
                 js: function() {
 
@@ -20,7 +20,7 @@ modules.define('spec',
 
         it('should glue field', function() {
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
                     block: 'glue',
@@ -56,7 +56,7 @@ modules.define('spec',
 
         it('should glue field with mod', function() {
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
                     block: 'glue',
@@ -96,7 +96,7 @@ modules.define('spec',
                 str: 'abc'
             });
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
                     block: 'glue',
@@ -122,7 +122,7 @@ modules.define('spec',
             }));
 
             var block = $('.b-glued-field').bem('b-glued-field');
-            BEMDOM.destruct(block.domElem); // Не совсем понял что было в оригинале.
+            bemDom.destruct(block.domElem); // Не совсем понял что было в оригинале.
 
             var fn = function() { model.set('num', 1); };
             fn.should.not.throw();
@@ -130,7 +130,7 @@ modules.define('spec',
 
         it('glue field baseBlock', function() {
 
-            BEMDOM.decl({ block: 'b-base-glued-field', baseBlock: Glue }, {
+            bemDom.decl({ block: 'b-base-glued-field', baseBlock: Glue }, {
                 onSetMod: {
                     js: function() {
                         this.__base();
@@ -138,7 +138,7 @@ modules.define('spec',
                 }
             });
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-base-glued-field',
                 js: {
                     modelName: 'glue-field-model',

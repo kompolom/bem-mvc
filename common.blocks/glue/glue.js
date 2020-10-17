@@ -1,19 +1,28 @@
-modules.define(
-    'glue',
-    ['i-bem__dom', 'i-bem__internal', 'objects', 'jquery', 'model'],
-    function(provide, BEMDOM, INTERNAL, objects, $, MODEL) {
+/**
+ * @module glue
+ */
+modules.define('glue', [
+    'i-bem-dom',
+    'glue-field',
+    'i-bem__internal',
+    'model'
+], function(provide,
+    bemDom,
+    GlueField,
+    INTERNAL,
+    MODEL
+) {
 
 /**
- * Блок для проклеивания моделей и DOM
+ * @exports
+ * @class Glue
+ * @bem
  */
-provide(BEMDOM.decl('glue', {
-
-    onSetMod: {
-        js: {
-            inited: function() {
-
+provide(bemDom.declBlock(this.name, /** @lends Glue.prototype */ {
+    onSetMod : {
+        js : {
+            inited : function() {
                 this.glue();
-
             }
         }
     },
@@ -23,7 +32,7 @@ provide(BEMDOM.decl('glue', {
     /**
      * Проклеить BEM-блоки полей с полями модели
      */
-    glue: function() {
+    glue : function() {
         this
             ._initModel()
             ._initFields();
@@ -33,15 +42,15 @@ provide(BEMDOM.decl('glue', {
      * Инициализирует модель, соответствующую данному блоку
      * @param {Object} [modelParams] Парметры модели
      * @param {Object} [modelData] Данные для инициализации модили
-     * @returns {BEM}
+     * @returns {Glue}
      * @private
      */
-    _initModel: function(modelParams, modelData) {
+    _initModel : function(modelParams, modelData) {
         var mParams = modelParams || this.getModelParams(),
             data = modelData || this.params.modelData || (this.params.modelParams && this.params.modelParams.data),
             model;
 
-        if (data) {
+        if(data) {
             model = MODEL.create(mParams, data);
         } else {
             model = MODEL.getOrCreate(mParams);
@@ -54,43 +63,38 @@ provide(BEMDOM.decl('glue', {
 
     /**
      * Инициализирует поля и провязывает их с моделью
-     * @returns {BEM}
+     * @returns {Glue}
      * @private
      */
-    _initFields: function() {
-
+    _initFields : function() {
         this._fields = {};
 
-        this.findElem('model-field').each(function(i, elem) {
-            this.initFieldBlock($(elem));
-        }.bind(this));
+        this._elems('model-field').forEach((elem) => this.initFieldBlock(elem));
 
         return this;
     },
 
     /**
      * Инициализируем блок glue-field (или его потомка) на BEM-блоке
-     * @param {jQuery} elem
-     * @returns {BEM}
+     * @param {Elem} elem
+     * @returns {Glue}
      */
-    initFieldBlock: function(elem) {
-        elem = this.elemify(elem, 'model-field'); // идентифицируем элемент для случая, когда на одной ноде несколько элементов
+    initFieldBlock : function(elem) {
+        let elemParams = elem.params;
 
-        var elemParams = this.elemParams(elem) || {};
-
-        if (!Array.isArray(elemParams))
+        if(!Array.isArray(elemParams))
             elemParams = [elemParams];
 
         elemParams.forEach(function(fieldParams) {
             fieldParams.name || (fieldParams.name = this.getMod(elem, 'name'));
             fieldParams.type || (fieldParams.type = this.getMod(elem, 'type'));
 
-            var type = fieldParams.type,
-                cls = INTERNAL.buildClasses('glue-field', { type : type });
+            const type = fieldParams.type,
+                cls = INTERNAL.buildClassNames('glue-field', { type : type });
 
             // Миксуем блок glue-field
-            elem.addClass(cls);
-            var block = this.findBlockOn(elem, 'glue-field');
+            elem.domElem.addClass(cls);
+            const block = elem.findMixedBlock(GlueField);
             block.params = fieldParams; // Передавать параметры через атрибут накладно. Передаем их после инициализации
 
             this._fields[fieldParams.name] = block;
@@ -102,10 +106,10 @@ provide(BEMDOM.decl('glue', {
 
     /**
      * Возвращает BEM-блок по имени поля из модели
-     * @param name Имя поля
+     * @param {string} name Имя поля
      * @returns {BEM}
      */
-    getFieldBlock: function(name) {
+    getFieldBlock : function(name) {
         return this._fields[name];
     },
 
@@ -113,18 +117,18 @@ provide(BEMDOM.decl('glue', {
      * Возвращает параметры модели
      * @returns {Object}
      */
-    getModelParams: function() {
-        if (this.params.modelParams) return this.params.modelParams;
+    getModelParams : function() {
+        if(this.params.modelParams) return this.params.modelParams;
 
         var params = {
-            name: this.getModelName(),
-            id: this.params.modelId
+            name : this.getModelName(),
+            id : this.params.modelId
         };
 
-        if (this.params.modelParentPath)
+        if(this.params.modelParentPath)
             params.parentPath = this.params.modelParentPath;
 
-        if (this.params.modelParentName) {
+        if(this.params.modelParentName) {
             params.parentName = this.params.modelParentName;
             params.parentId = this.params.modelParentId;
         }
@@ -136,7 +140,7 @@ provide(BEMDOM.decl('glue', {
      * Возвращает путь к модели, соответствующей данному блоку
      * @returns {String}
      */
-    getModelPath: function() {
+    getModelPath : function() {
         return MODEL.buildPath(this.getModelParams);
     },
 
@@ -144,20 +148,34 @@ provide(BEMDOM.decl('glue', {
      * Возвращает имя модели, соответствующей данному блоку
      * @returns {String}
      */
-    getModelName: function() {
+    getModelName : function() {
         return this.params.modelName || this.__self.getName();
     },
 
     /**
      * Уничтожает блок и созданные им объекты
-     * @param keepDOM
+     * @param {boolean} keepDOM
      */
-    destruct: function(keepDOM) {
+    destruct : function(keepDOM) {
         this._fields && Object.keys(this._fields).forEach(function(name) {
             this._fields[name].destruct(keepDOM);
         }, this);
 
         this.__base.apply(this, arguments);
+    },
+
+    /**
+     * Обновляет биндинги полей модели
+     * @private
+     */
+    _updateModelBindings : function() {
+        this._elems('model-field').forEach((elem) => {
+            if(elem.domElem.hasClass('glue-field_js_inited')) {
+                return;
+            }
+
+            this.initFieldBlock(elem);
+        });
     }
 
 }));

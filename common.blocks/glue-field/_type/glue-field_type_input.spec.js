@@ -1,6 +1,6 @@
 modules.define('spec',
-               ['glue-field', 'glue', 'model', 'sinon', 'i-bem__dom', 'BEMHTML', 'jquery', 'input'],
-               function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $, Input) {
+               ['glue-field', 'glue', 'model', 'sinon', 'i-bem-dom', 'BEMHTML', 'jquery', 'input'],
+               function(provide, GField, Glue, MODEL, sinon, bemDom, BEMHTML, $, Input) {
 
     MODEL.decl('glue-field-input-model', {
         num: 'number',
@@ -9,7 +9,7 @@ modules.define('spec',
 
     describe('glue field type input', function() {
 
-        BEMDOM.decl('b-glued-field', {
+        bemDom.decl('b-glued-field', {
             onSetMod: {
                 js: function() {
                 }
@@ -26,7 +26,7 @@ modules.define('spec',
             str: 's'
         });
 
-        BEMDOM.append('body', BEMHTML.apply({
+        bemDom.append('body', BEMHTML.apply({
             block: 'b-glued-field',
             mix: [{
                 block: 'glue',

@@ -4,7 +4,7 @@
 {
     tech : 'spec.js',
     mustDeps : [
-        { block : 'i-bem', elem : 'dom' },
+        { block : 'i-bem-dom' },
         { block : 'model', tech : 'bemhtml' },
         { block : 'model-aggregator' },
         { block : 'model-aggregator', tech : 'bemhtml' },

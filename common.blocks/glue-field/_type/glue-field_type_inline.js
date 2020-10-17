@@ -1,8 +1,8 @@
-modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
+modules.define('glue-field', [], function(provide, GlueField) {
 
-provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'inline'}, {
+provide(GlueField.declMod({ modName : 'type', modVal : 'inline'}, {
 
-    onFieldChange: function(e, data) {
+    onFieldChange: function() {
         this.domElem.html(this.model.get(this.name, 'format'));
     }
 

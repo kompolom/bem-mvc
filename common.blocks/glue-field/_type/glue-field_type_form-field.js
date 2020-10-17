@@ -1,10 +1,13 @@
-modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
-    provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'form-field'}, {
+modules.define('glue-field',
+    ['form-field'],
+    function(provide, FormField, GlueField) {
+
+    provide(GlueField.declMod({ modName : 'type', modVal : 'form-field'}, {
         onSetMod: {
             js: {
                 inited: function() {
                     this.__base();
-                    this.ff = this.findBlockOn('form-field');
+                    this.ff = this.findMixedBlock(FormField);
                 }
             }
         },
@@ -12,7 +15,7 @@ modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
         init: function() {
             this.__base.apply(this, arguments);
 
-            this.ff
+            this._events(this.ff)
                 .on('change', function() {
                     this.model.set(this.name, this.ff.getVal());
                 }, this)
@@ -28,7 +31,7 @@ modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
             this.__base();
             this.ff.setVal(value);
         },
-        
+
         onModelFixed : function(){
             if(!this.ff.getDirty())
                 return;

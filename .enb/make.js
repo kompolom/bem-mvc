@@ -6,7 +6,7 @@ var fs = require('fs'),
             merge : require('enb/techs/file-merge')
         },
         bem : require('enb-bem-techs'),
-        stylus : require('enb-stylus/techs/stylus'),
+        //stylus : require('enb-stylus/techs/stylus'),
         js : require('enb-js/techs/browser-js'),
         ym : require('enb-modules/techs/prepend-modules'),
         engines : {
@@ -43,10 +43,12 @@ module.exports = function(config) {
                 filesTarget : '?.bemhtml.files',
                 dirsTarget : '?.bemhtml.dirs'
             }],
+            /*
             [techs.stylus, {
                 target: '_?.css',
                 sourcemap: false,
             }],
+             */
             [techs.js, {
                 target : '?.browser.js',
                 includeYM : true
@@ -69,7 +71,7 @@ module.exports = function(config) {
         ]);
 
         nodeConfig.addTargets([
-             '_?.css', '_?.js', '?.html'
+             /*'_?.css',*/ '_?.js', '?.html'
         ]);
     });
 
@@ -87,13 +89,13 @@ module.exports = function(config) {
 
 function getDesktopLevels() {
     return [
-        { path : 'libs/bem-pr/spec.blocks', check : false },
-        { path : 'libs/bem-core/common.blocks', check : false },
-        { path : 'libs/bem-core/desktop.blocks', check : false },
-        { path : 'libs/bem-components/common.blocks', check : false },
-        { path : 'libs/bem-components/desktop.blocks', check : false },
-        { path : 'libs/bem-components/design/common.blocks', check : false },
-        { path : 'libs/bem-components/design/desktop.blocks', check : false },
+        { path : 'node_modules/bem-pr/spec.blocks', check : false },
+        { path : 'node_modules/bem-core/common.blocks', check : false },
+        { path : 'node_modules/bem-core/desktop.blocks', check : false },
+        { path : 'node_modules/bem-components/common.blocks', check : false },
+        { path : 'node_modules/bem-components/desktop.blocks', check : false },
+        { path : 'node_modules/bem-components/design/common.blocks', check : false },
+        { path : 'node_modules/bem-components/design/desktop.blocks', check : false },
         'common.blocks'
     ];
 }

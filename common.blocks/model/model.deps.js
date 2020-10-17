@@ -4,6 +4,7 @@
     ],
     shouldDeps: [
         'objects',
+        'events',
         {
             block: 'functions',
             elems: ['throttle', 'debounce']

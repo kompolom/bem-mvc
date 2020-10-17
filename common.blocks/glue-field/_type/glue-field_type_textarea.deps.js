@@ -2,5 +2,7 @@
     mustDeps: [
         { mods : { type : 'input' } }
     ],
-    shouldDeps: []
+    shouldDeps: [
+        'textarea'
+    ]
 })

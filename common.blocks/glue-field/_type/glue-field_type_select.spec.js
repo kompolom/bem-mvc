@@ -1,6 +1,6 @@
 modules.define('spec',
-['glue-field', 'glue', 'model', 'sinon', 'i-bem__dom', 'BEMHTML', 'jquery', 'menu', 'select', 'menu-item'],
-function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $, Menu, Select, MenuItem) {
+['glue-field', 'glue', 'model', 'sinon', 'i-bem-dom', 'BEMHTML', 'jquery', 'menu', 'select', 'menu-item'],
+function(provide, GField, Glue, MODEL, sinon, bemDom, BEMHTML, $, Menu, Select, MenuItem) {
 
     MODEL.decl('glue-field-select-model', {
         num: 'number',
@@ -10,7 +10,7 @@ function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $, Menu, Select, 
 
     describe('glue field type select', function() {
 
-        BEMDOM.decl('b-glued-field', {
+        bemDom.decl('b-glued-field', {
             onSetMod: {
                 js: function() {
                 }
@@ -29,7 +29,7 @@ function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $, Menu, Select, 
                 str: 's'
             });
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
                     block: 'glue',

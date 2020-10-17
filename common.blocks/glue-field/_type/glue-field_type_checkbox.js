@@ -1,13 +1,13 @@
-modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
+modules.define('glue-field', ['checkbox'], function(provide, Checkbox, GlueField) {
 
-provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'checkbox'}, {
+provide(GlueField.declMod({ modName : 'type', modVal : 'checkbox'}, {
 
     onSetMod: {
         js: {
             inited: function() {
                 this.__base();
 
-                this.checkbox = this.findBlockOn('checkbox');
+                this.checkbox = this.findMixedBlock(Checkbox);
             }
         }
     },
@@ -15,9 +15,10 @@ provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'checkbox'
     init: function() {
         this.__base.apply(this, arguments);
 
-        this.checkbox.on({ modName: 'checked', modVal: '*' }, function(e, data) {
-            this.model.set(this.name, !!data.modVal);
-        }, this);
+        this._events(this.checkbox)
+            .on({ modName: 'checked', modVal: '*' }, function(e, data) {
+                this.model.set(this.name, !!data.modVal);
+            }, this);
     },
 
     set: function(value) {

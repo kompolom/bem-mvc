@@ -1,6 +1,6 @@
 modules.define('spec',
-               ['glue', 'model', 'sinon', 'jquery', 'chai', 'i-bem__dom', 'BEMHTML'],
-               function(provide, Glue, MODEL, sinon, $, chai, BEMDOM, BEMHTML) {
+               ['glue', 'model', 'sinon', 'jquery', 'chai', 'i-bem-dom', 'BEMHTML'],
+               function(provide, Glue, MODEL, sinon, $, chai, bemDom, BEMHTML) {
 
     var expect = chai.expect;
 
@@ -9,7 +9,7 @@ modules.define('spec',
         str: 'string'
     });
 
-    BEMDOM.decl('b-glued', {
+    bemDom.decl('b-glued', {
         onSetMod: {
             js: function() {
 
@@ -21,7 +21,7 @@ modules.define('spec',
     describe('glue', function() {
 
         it('should create model', function() {
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-glued',
                 mix: [{
                     block: 'glue',
@@ -45,7 +45,7 @@ modules.define('spec',
 
         it('should create model 2', function() {
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-glued',
                 mix: [{
                     block: 'glue',
@@ -75,7 +75,7 @@ modules.define('spec',
                 str: 'a'
             });
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-glued',
                 mix: [{
                     block: 'glue',
@@ -94,7 +94,7 @@ modules.define('spec',
             model.destruct();
         });
         it('glue baseBlock', function() {
-            BEMDOM.decl({ block: 'b-base-glued', baseBlock: 'glue' }, {
+            bemDom.decl({ block: 'b-base-glued', baseBlock: 'glue' }, {
                 onSetMod: {
                     js: function() {
                         this.__base();
@@ -102,7 +102,7 @@ modules.define('spec',
                 }
             });
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-base-glued',
                 js: {
                     modelName: 'glue-model',
@@ -126,7 +126,7 @@ modules.define('spec',
                 f2: 'number'
             });
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'model-aggregator',
                 content: [
                     {

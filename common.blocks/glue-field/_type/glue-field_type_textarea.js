@@ -1,12 +1,14 @@
-modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
+modules.define('glue-field',
+    ['textarea'],
+    function(provide, Textarea, GlueField) {
 
-    provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'textarea'}, {
+    provide(GlueField.declMod({ modName : 'type', modVal : 'textarea'}, {
 
         onSetMod: {
             js: {
                 inited: function() {
                     this.__base();
-                    this.input = this.findBlockOn('textarea');
+                    this.input = this.findMixedBlock(Textarea);
                 }
             }
         },
@@ -14,7 +16,7 @@ modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
         init: function() {
             this.__base.apply(this, arguments);
 
-            this.input
+            this._events(this.input)
                 .on('change', function() {
                     this.model.set(this.name, this.input.getVal());
                 }, this)

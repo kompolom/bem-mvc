@@ -1,4 +1,6 @@
 ({
     mustDeps : [{ mods : { type : 'input' } }],
-    shouldDeps : []
+    shouldDeps : [
+        'radio-group'
+    ]
 })

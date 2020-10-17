@@ -1,6 +1,6 @@
-modules.define('glue-field', ['i-bem__dom'], function(provide, BEMDOM) {
+modules.define('glue-field', [], function(provide, GlueField) {
 
-provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'mod'}, {
+provide(GlueField.declMod({ modName : 'type', modVal : 'mod'}, {
 
     onSetMod: {
         js: {
@@ -12,9 +12,9 @@ provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'mod'}, {
 
     init: function() {
         this.__base.apply(this, arguments);
-        
-        this._gluedBlock = this[this.params.elem ? 'findBlockOutside' : 'findBlockOn'](this.domElem, this.params.block || this.__self.getName());
-        this._gluedElem = this.params.elem && this._gluedBlock.findElem(this.domElem, this.params.elem);
+
+        this._gluedBlock = this[this.params.elem ? 'findParentBlock' : 'findMixedBlock'](this.domElem, this.params.block || this.__self.getName());
+        this._gluedElem = this.params.elem && this._gluedBlock.findChildElem(this.domElem, this.params.elem);
 
         this._fieldType = this.model.getType(this.name);
     },
@@ -25,6 +25,7 @@ provide(BEMDOM.decl({ block: 'glue-field', modName : 'type', modVal : 'mod'}, {
         if (this._fieldType == 'boolean')
             modVal = modVal ? true : false;
 
+        debugger
         this._gluedBlock.setMod(this._gluedElem, this.params.modName, modVal);
     }
 

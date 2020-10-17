@@ -1,6 +1,6 @@
 modules.define('spec',
-               ['glue-field', 'glue', 'model', 'sinon', 'i-bem__dom', 'BEMHTML', 'jquery'],
-               function(provide, GField, Glue, MODEL, sinon, BEMDOM, BEMHTML, $) {
+               ['glue-field', 'glue', 'model', 'sinon', 'i-bem-dom', 'BEMHTML', 'jquery'],
+               function(provide, GField, Glue, MODEL, sinon, bemDom, BEMHTML, $) {
 
     MODEL.decl('glue-field-inline-model', {
         num: 'number',
@@ -9,7 +9,7 @@ modules.define('spec',
 
     describe('glue field type inline', function() {
 
-        BEMDOM.decl('b-glued-field', {
+        bemDom.decl('b-glued-field', {
             onSetMod: {
                 js: function() {
                 }
@@ -28,7 +28,7 @@ modules.define('spec',
                 str: 'a'
             });
 
-            BEMDOM.append('body', BEMHTML.apply({
+            bemDom.append('body', BEMHTML.apply({
                 block: 'b-glued-field',
                 mix: [{
                     block: 'glue',
